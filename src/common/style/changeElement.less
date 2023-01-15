@@ -1,0 +1,21 @@
+// 修改element样式
+#body {
+  .el-dialog {    
+    margin: 8vh auto;
+    height: 84vh;
+    border-radius: 8px;
+    box-shadow: 0 16px 32px rgb(0 0 0 / 20%);
+    overflow: hidden;
+    .el-dialog__body {
+      box-sizing: border-box;
+      height: calc(100% - 54px);
+      padding: 20px;
+    }
+    
+  }
+  .el-table--striped {
+    .el-table__body tr.el-table__row--striped td.el-table__cell {
+      background: var(--el-color-primary-light-9);
+    }
+  }
+}
