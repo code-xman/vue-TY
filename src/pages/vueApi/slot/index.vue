@@ -21,19 +21,19 @@
       <template #a2><p>具名插槽-a2</p></template>
     </A>
 
-    <LightText
-      >子组件的slot绑定的attr，可以通过“#‘插槽名’=‘自定义props名字’”获取，
-      自定义props名字.*** 进行使用</LightText
-    >
+    <LightText>
+      子组件的slot绑定的attr，可以通过“#‘插槽名’=‘自定义props名字’”获取，
+      自定义props名字.*** 进行使用
+    </LightText>
     <A>
       <template #a1="data1">
         <p>{{ data1.data.a }}</p>
         <p>{{ data1.num }}</p>
       </template>
     </A>
-    <LightText
-      >可以对slot传来的数据进行结构，结构后的数据依然是响应式数据</LightText
-    >
+    <LightText>
+      可以对slot传来的数据进行结构，结构后的数据依然是响应式数据
+    </LightText>
     <A>
       <template #a1="{ data, num }">
         <p>{{ data.a }}</p>
