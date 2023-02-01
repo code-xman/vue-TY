@@ -3,7 +3,7 @@
  * @Author: xiangjie
  * @Date: 2023-01-08 12:57:13
  * @LastEditors: xiangjie
- * @LastEditTime: 2023-01-15 16:32:54
+ * @LastEditTime: 2023-02-01 16:21:37
 -->
 <template>
   <div class="flex-all column">
@@ -106,6 +106,8 @@ const openDB = (databaseName: string, version: number, callback?: Function) => {
   ) {
     // 获取数据
     IDB.value = (event.target as any)?.result;
+    // 创建表仅能在onupgradeneeded中执行
+    createObjectStore(personParams)
   };
 };
 /** 关闭数据库 */
@@ -172,6 +174,8 @@ const createObjectStore = (params: createStoreParams) => {
 const getAllData = (storeName: string) => {
   try {
     if (!IDB.value) throw `查询数据失败`;
+    // 判断是否有 表名为 params.name的表；没有就新增一张
+    if (!IDB.value?.objectStoreNames.contains(storeName)) throw `查询数据失败:未创建${storeName}表`;
     // 最终结果
     const res: personRowData[] = [];
     // 获取数据库的表对象
@@ -254,10 +258,10 @@ const btnList: btnItem[] = [
     },
   },
   {
-    key: 'createStore',
-    name: '创建person表',
+    key: 'getAllData',
+    name: '获取person表数据',
     click: () => {
-      createObjectStore(personParams);
+      getAllData(personParams.name);
     },
   },
   {
@@ -274,7 +278,7 @@ const btnList: btnItem[] = [
 ];
 
 onMounted(() => {
-  openDB('test', 1, () => getAllData(personParams.name));
+  openDB('test', 1, );
 });
 
 onUnmounted(() => {
