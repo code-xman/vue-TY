@@ -3,12 +3,14 @@
  * @Author: xiangjie
  * @Date: 2023-01-11 16:55:55
  * @LastEditors: xiangjie
- * @LastEditTime: 2023-01-12 11:23:50
+ * @LastEditTime: 2023-02-21 13:43:27
 -->
 <template>
   <div class="base-table"></div>
   <el-table
     v-bind="tableProps.attrs"
+    ref="baseTableRef"
+    class="baseTable"
     :data="props.tableData"
     :height="tableProps.height || '100%'"
   >
@@ -37,6 +39,7 @@
 </template>
 
 <script setup lang="ts">
+import { DefineComponent, ref, } from 'vue';
 import { TablePropsType, columnsType, optionColType } from './type';
 const props = withDefaults(
   defineProps<{
@@ -59,6 +62,8 @@ const props = withDefaults(
     optionCol: () => ({}),
   }
 );
+// table ref
+const baseTableRef  = ref<DefineComponent | null>(null)
 </script>
 
 <style lang="less" scoped></style>

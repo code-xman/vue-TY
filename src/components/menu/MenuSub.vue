@@ -14,7 +14,7 @@
   </el-sub-menu>
   <el-menu-item v-else :index="props.index">
     <template #title>
-      <div class="menu-item" @click="toPage(props.path)">
+      <div class="menu-item" @click="() => toPage(props.path)">
         {{ props.title }}
       </div>
     </template>
@@ -24,15 +24,20 @@
 <script setup lang="ts">
 import { getCurrentInstance, computed } from 'vue';
 import { useRouter } from 'vue-router';
-const props = defineProps({
-  index: String,
-  title: String,
-  path: String,
-  child: {
-    type: Array,
-    default: []
+import { menuType } from './menuList';
+const props = withDefaults(
+  defineProps<{
+    index: string,
+    title: string,
+    path: string,
+    child: menuType[]
+  }>(), {
+    index: '',
+    title: '',
+    path: '',
+    child: () => [],
   }
-});
+)
 // self --> this
 const self = getCurrentInstance();
 
