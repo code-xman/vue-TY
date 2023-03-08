@@ -17,6 +17,7 @@ Object.keys(modules).forEach((filePath:  string) => {
 
 console.groupEnd()
 
+// 实例化路由控制器
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
