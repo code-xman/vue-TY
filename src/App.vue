@@ -1,24 +1,15 @@
 <template>
   <el-config-provider :z-index="elAttr.zIndex" :locale="zhCN">
-    <el-menu
-      class="header"
-      mode="horizontal"
-      :ellipsis="false"
-      @select="handleSelect"
-    >
-      <el-menu-item index="0">LOGO</el-menu-item>
-      <el-menu-item v-if="$route.meta.title" index="1" class="title" disabled>
-        {{ $route.meta.title || '' }}
-      </el-menu-item>
+    <div class="header">
+      <img class="logo" src="./assets/logo-full.svg" />
+      <div class="home item">步客科技 Demo 服务平台</div>
+      <div v-if="route.name" class="title" disabled>
+        {{ route.name || '' }}
+      </div>
       <div class="flex-1"></div>
-      <el-menu-item index="2">个人中心</el-menu-item>
-      <el-sub-menu index="3">
-        <template #title>操作</template>
-        <el-menu-item index="2-1">item one</el-menu-item>
-        <el-menu-item index="2-2">item two</el-menu-item>
-        <el-menu-item index="2-3">item three</el-menu-item>
-      </el-sub-menu>
-    </el-menu>
+      <div class="item">个人中心</div>
+      <div class="item">操作</div>
+    </div>
     <div class="container flex-1 flex">
       <Menu />
       <div class="flex-1 box-border mg-10">
@@ -33,31 +24,50 @@
 <script setup lang="ts">
 import zhCN from 'element-plus/lib/locale/lang/zh-cn';
 import { defineComponent, ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import Menu from './components/menu/index.vue';
 // element
 const elAttr = {
   zIndex: 3000,
 };
-// 导航
-const handleSelect = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath);
-};
+const route = useRoute();
+
 </script>
 
 <style lang="less" scoped>
 @import '@/common/style/const.less';
 
 .header {
-  height: 41px;
-  // color: #fff;
-  // background-color: @app-primary-color;
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding-right: 16px;
+  color: #fff;
+  font-size: 14px;
+  line-height: 18px;
+  background-color: #526aec;
+  background-image: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.4),
+    rgba(0, 0, 0, 0) 50%
+  );
+  .logo {
+    max-height: 100%;
+    max-width: 100%;
+  }
+
+  .item {
+    padding: 0 16px;
+    cursor: pointer;
+  }
+
+  .home {
+    font-weight: bold;
+    font-size: 18px;
+  }
   .title {
-    border-left: 1px solid var(--el-menu-border-color);
     width: 140px;
     cursor: default;
-  }
-  .el-menu-item.is-disabled {
-    opacity: 1;
   }
 }
 .container {
@@ -69,6 +79,6 @@ const handleSelect = (key: string, keyPath: string[]) => {
 </style>
 
 <!-- 修改全局的样式 -->
-<style lang="less" >
+<style lang="less">
 @import '@/common/style/changeElement.less';
 </style>

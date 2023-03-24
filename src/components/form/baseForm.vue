@@ -37,8 +37,14 @@ import { FormItem } from './type';
 
 import { cloneDeep } from 'lodash';
 import { reactive, ref, watch, watchEffect } from 'vue';
-import { FormInstance, FormItemRule, FormRules } from 'element-plus';
+import { FormInstance, FormItemRule, FormRules, ElMessage } from 'element-plus';
 import BaseFormItem from '@/baseComponents/BaseFormItem.vue';
+
+interface FormItemError {
+  field: string;
+  fieldValue: any;
+  message: string;
+}
 
 const emit = defineEmits(['update:valueObj']);
 const props = withDefaults(
@@ -114,11 +120,28 @@ const valChange = (val: any, name: string) => {
 /** 向外部暴露validate方法 */
 const validate = () => {
   if (!form) return;
+  // 需要return此Promise，否则外部无法知道验证结果
   return new Promise((resolve, reject) => {
-    form.value?.validate((valid) => {
-      resolve(valid);
+    // 进行验证，valid 验证结果  error 错误信息
+    form.value?.validate((valid, error) => {
+      if (!valid) {
+        reject(error);
+      } else {
+        resolve(valid);
+      }
     });
-  });
+  })
+    .then(res => res)
+    .catch((error: string | { [key: string]: FormItemError[] }) => {
+      if (typeof error === 'string') {
+        ElMessage.warning(error);
+        return false;
+      }
+
+      const keys = Object.keys(error);
+      ElMessage.warning(error[keys[0]][0].message);
+      return false;
+    });
 };
 
 defineExpose({
@@ -131,7 +154,9 @@ defineExpose({
 :deep(.el-form-item) {
   box-sizing: border-box;
   padding: 5px 20px;
-  .el-input, .el-input-number {
+  .el-input,
+  .el-input-number,
+  .el-select {
     width: 100%;
   }
   .el-input-number {

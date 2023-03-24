@@ -15,6 +15,11 @@ const components: menuType[] = [
         index: 'form-1',
         path: '/form/form-1'
       },
+      {
+        title: 'StepForm',
+        index: 'StepForm',
+        path: '/form/StepForm'
+      },
     ]
   },
 ]

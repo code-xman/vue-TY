@@ -22,10 +22,14 @@ defineProps({
 
 <style lang="less" scoped>
 .box-bottom-btn {
+  margin-top: 8px;
   border-top: 1px solid #eee;
-  padding: 10px 0 5px;
+  padding: 8px;
   &.center {
     justify-content: center;
+  }
+  &.left {
+    justify-content: left;
   }
   &.right {
     justify-content: right;

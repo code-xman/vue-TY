@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="tsx">
-import { reactive, ref, defineComponent, h } from 'vue';
+import { reactive, ref, defineComponent, h, DefineComponent } from 'vue';
 import {
   ElInput,
   FormRules,
@@ -31,7 +31,7 @@ import BaseForm from '@/components/form/baseForm.vue';
 import Btns from '@/components/button/boxBottomBtn.vue';
 import { btnItem } from '@/components/button/type';
 
-const baseFormRef = ref();
+const baseFormRef = ref<DefineComponent | null>(null);
 const formAttr = {
   labelPosition: 'right',
 };
@@ -192,12 +192,6 @@ const btnList: btnItem[] = [
           type: 'success',
           showClose: true,
         });
-      } else {
-        ElMessage({
-          message: '验证失败',
-          type: 'warning',
-          showClose: true,
-        });
       }
     },
   },
@@ -222,9 +216,9 @@ const btnList: btnItem[] = [
     attr: {
       type: 'primary',
     },
-    click: () => {
+    click: async () => {
       // 调用baseForm的验证方法validate，对表单进行验证
-      const validateRes = baseFormRef.value?.validate();
+      const validateRes = await baseFormRef.value?.validate();
       if (validateRes) {
         console.log('valueObj :>> ', valueObj.value);
       }

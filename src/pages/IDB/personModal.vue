@@ -3,7 +3,7 @@
  * @Author: xiangjie
  * @Date: 2023-01-10 14:44:25
  * @LastEditors: xiangjie
- * @LastEditTime: 2023-01-12 11:22:03
+ * @LastEditTime: 2023-03-23 19:21:58
 -->
 
 <template>
@@ -12,6 +12,7 @@
     width="80%"
     append-to-body
     title="person数据操作"
+    class="my-dialog"
     :close-on-click-modal="false"
   >
     <div class="flex-all column">
@@ -268,31 +269,23 @@ const btnList = ref(<btnItem[]>[
       type: 'primary',
     },
     click: async () => {
-      try {
-        const validateRes = await baseFormRef.value?.validate();
-        if (!validateRes) return;
-        if (props.type === 'add') {
-          addData({
-            storeName: personParams.name,
-            opType: 'readwrite',
-            personRowData: valueObj.value,
-          });
-        } else {
-          updateData({
-            storeName: personParams.name,
-            opType: 'readwrite',
-            personRowData: valueObj.value,
-          });
-        }
-        emit('on-close');
-        show.value = false;
-      } catch (error) {
-        ElMessage({
-          message: `${error}`,
-          type: 'error',
-          showClose: true,
+      const validateRes = await baseFormRef.value?.validate();
+      if (!validateRes) return;
+      if (props.type === 'add') {
+        addData({
+          storeName: personParams.name,
+          opType: 'readwrite',
+          personRowData: valueObj.value,
+        });
+      } else {
+        updateData({
+          storeName: personParams.name,
+          opType: 'readwrite',
+          personRowData: valueObj.value,
         });
       }
+      emit('on-close');
+      show.value = false;
     },
   },
 ]);
