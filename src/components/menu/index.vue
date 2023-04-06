@@ -1,5 +1,5 @@
 <template>
-  <el-menu class="menu">
+  <el-menu class="menu" :unique-opened="true">
     <MenuSub
       v-for="(item, index) in menuList"
       :key="item.index"

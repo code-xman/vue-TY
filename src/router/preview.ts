@@ -4,6 +4,9 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/preview/pdf',
     name: 'previewPDF',
+    meta: {
+      title: '预览PDF',
+    },
     component: () => import('@/pages/preview/PDF.vue')
   },
 ];

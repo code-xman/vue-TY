@@ -4,7 +4,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/IDB/test',
     name: 'IDB_test',
-    meta: { title: 'IDB test', },
+    meta: { title: '前端数据库 IndexedDB', },
     component: () => import('@/pages/IDB/test.vue')
   },
 ];

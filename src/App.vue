@@ -3,8 +3,8 @@
     <div class="header">
       <img class="logo" src="./assets/logo-full.svg" />
       <div class="home item">步客科技 Demo 服务平台</div>
-      <div v-if="route.name" class="title" disabled>
-        {{ route.name || '' }}
+      <div v-if="route.meta.title" class="title" disabled>
+        {{ route.meta.title || '' }}
       </div>
       <div class="flex-1"></div>
       <div class="item">个人中心</div>
@@ -67,7 +67,8 @@ const route = useRoute();
   }
   .title {
     width: 140px;
-    cursor: default;
+    padding: 0 16px;
+    font-weight: 600;
   }
 }
 .container {

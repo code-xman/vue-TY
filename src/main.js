@@ -18,4 +18,7 @@ import router from '@/router';
 // 自动注册的公用组件
 import myUI from './baseComponents'
 
+// mock
+import '../mock/index';
+
 createApp(App).use(router).use(myUI).mount('#app');
