@@ -9,6 +9,14 @@ const routes: RouteRecordRaw[] = [
     },
     component: () => import('@/components/text/show.vue')
   },
+  {
+    path: '/components/showTree',
+    name: 'componentsShowTree',
+    meta: {
+      title: '树型结构',
+    },
+    component: () => import('@/components/tree/showTree.vue')
+  },
 ];
 
 export default routes;

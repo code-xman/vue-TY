@@ -10,6 +10,11 @@ const components: menuType[] = [
         index: 'lightText',
         path: '/components/lightText'
       },
+      {
+        title: 'tree',
+        index: 'tree',
+        path: '/components/showTree'
+      },
     ]
   },
 ]
