@@ -6,6 +6,7 @@
       :index="item.index"
       :title="item.title"
       :path="item.path"
+      :name="item.name"
       :child="item.child"
     >
     </MenuSub>
@@ -13,9 +14,38 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import menuList from './menuList';
+import { ref, onMounted } from 'vue';
+import { useRouter, RouteRecordRaw } from 'vue-router';
+// import menuList from './menuList';
+import { menuType } from './menuList';
 import MenuSub from './MenuSub.vue';
+
+// 路由
+const router = useRouter();
+
+// console.log('router :>> ', router.options.routes);
+
+const menuList = ref(<any>[]);
+
+const handleMenuData = (data: RouteRecordRaw[]): menuType[] => {
+  const res: menuType[] = data.map(item => {
+    return {
+      title: item.meta?.title as string || '',
+      index: item.name as string || '',
+      name: item.name as string || '',
+      path: item.path,
+      child: handleMenuData(item.children || []),
+    }
+  })
+
+  return res;
+};
+
+onMounted(() => {
+  menuList.value = handleMenuData([...router.options.routes])
+  // console.log('object :>> ', menuList.value);
+})
+
 </script>
 
 <style lang="less" scoped>

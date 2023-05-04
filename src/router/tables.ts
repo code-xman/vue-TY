@@ -2,12 +2,23 @@ import { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/table/sortTable',
+    path: '/table',
+    name: 'Table',
     meta: {
-      title: '表格拖动排序',
+      title: '表格',
     },
-    component: () => import('@/pages/table/sortTable.vue')
-  },
+    component: () => import('@/layout/Main.vue'),
+    children: [
+      {
+        path: 'sortTable',
+        name: 'SortTable',
+        meta: {
+          title: '表格拖动排序',
+        },
+        component: () => import('@/pages/table/sortTable.vue')
+      },
+    ]
+  }
 ];
 
 export default routes;

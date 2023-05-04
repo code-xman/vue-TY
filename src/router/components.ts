@@ -2,20 +2,30 @@ import { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/components/lightText',
-    name: 'componentsLightText',
+    path: '/components',
+    name: 'Components',
     meta: {
-      title: '高亮文字',
+      title: '组件',
     },
-    component: () => import('@/components/text/show.vue')
-  },
-  {
-    path: '/components/showTree',
-    name: 'componentsShowTree',
-    meta: {
-      title: '树型结构',
-    },
-    component: () => import('@/components/tree/showTree.vue')
+    component: () => import('@/layout/Main.vue'),
+    children: [
+      {
+        path: 'lightText',
+        name: 'LightText',
+        meta: {
+          title: '高亮文字',
+        },
+        component: () => import('@/components/text/show.vue'),
+      },
+      {
+        path: 'showTree',
+        name: 'ShowTree',
+        meta: {
+          title: '树型结构',
+        },
+        component: () => import('@/components/tree/showTree.vue'),
+      },
+    ],
   },
 ];
 

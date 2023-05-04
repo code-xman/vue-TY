@@ -9,12 +9,13 @@
       :index="item.index"
       :title="item.title"
       :path="item.path"
+      :name="item.name"
       :child="item.child"
     ></MenuSub>
   </el-sub-menu>
   <el-menu-item v-else :index="props.index">
     <template #title>
-      <div class="menu-item" @click="() => toPage(props.path)">
+      <div class="menu-item" @click="() => toPage(props.name)">
         {{ props.title }}
       </div>
     </template>
@@ -30,11 +31,13 @@ const props = withDefaults(
     index: string,
     title: string,
     path: string,
+    name: string,
     child: menuType[]
   }>(), {
     index: '',
     title: '',
     path: '',
+    name: '',
     child: () => [],
   }
 )
@@ -45,9 +48,9 @@ const hasChild = computed(() => props.child?.length > 0);
 
 // 路由
 const router = useRouter();
-const toPage = (url: string) => {
+const toPage = (name: string) => {
   // console.log('url :>> ', url, router);
-  router.push(url);
+  router.push({name});
 };
 </script>
 
