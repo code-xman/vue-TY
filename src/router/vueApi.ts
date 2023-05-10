@@ -25,6 +25,14 @@ const routes: RouteRecordRaw[] = [
         },
         component: () => import('@/pages/vueApi/provideInject/index.vue')
       },
+      {
+        path: 'useFunction',
+        name: 'useFunction',
+        meta: {
+          title: 'template使用引入的方法',
+        },
+        component: () => import('@/pages/vueApi/useFunction/index.vue')
+      },
     ],
   }
 ];

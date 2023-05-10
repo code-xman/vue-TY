@@ -5,14 +5,21 @@
 </template>
 
 <script setup lang="ts">
-defineProps({
-  type: {
-    type: String,
-    default: 'base',
-  },
-});
-
-const styleData = {
+withDefaults(
+  defineProps<{
+    type: 'base' | 'success' | 'warning' | 'error' | 'info';
+  }>(),
+  {
+    type: 'base'
+  }
+);
+const styleData: {
+  [key: string]: {
+    background: string;
+    color: string;
+    borderLeft: string;
+  };
+} = {
   base: {
     background: '#ecf5ff',
     color: '#409eff',
