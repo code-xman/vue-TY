@@ -3,6 +3,7 @@
     <MenuSub
       v-for="(item, index) in menuList"
       :key="item.index"
+      v-bind="$attrs"
       :index="item.index"
       :title="item.title"
       :path="item.path"
@@ -50,8 +51,9 @@ onMounted(() => {
 
 <style lang="less" scoped>
 .el-menu.el-menu--vertical.menu {
+  min-width: 200px;
   width: 200px;
-  padding-left: 10px;
+  padding: 4px;
   overflow-y: auto;
   overflow-x: hidden;
   // &:hover {
@@ -91,10 +93,20 @@ onMounted(() => {
       height: 40px;
       line-height: 40px;
       padding: 0;
+      font-size: 14px;
+      font-weight: 600;
     }
     .el-menu.el-menu--inline {
       .el-sub-menu, .el-menu-item {
         padding-left: 20px;
+      }
+    }
+
+    &.is-active {
+      .el-sub-menu__title {
+        border-radius: 10px;
+        background: var(--el-color-primary);
+        color: #fff;
       }
     }
   }

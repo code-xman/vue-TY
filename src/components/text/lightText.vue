@@ -7,7 +7,7 @@
 <script setup lang="ts">
 withDefaults(
   defineProps<{
-    type: 'base' | 'success' | 'warning' | 'error' | 'info';
+    type?: 'base' | 'success' | 'warning' | 'error' | 'info';
   }>(),
   {
     type: 'base'
@@ -21,9 +21,9 @@ const styleData: {
   };
 } = {
   base: {
-    background: '#ecf5ff',
-    color: '#409eff',
-    borderLeft: '3px solid #409eff',
+    background: 'var(--el-color-primary-light-9)',
+    color: 'var(--el-color-primary)',
+    borderLeft: '3px solid var(--el-color-primary)',
   },
   success: {
     background: '#f0f9eb',

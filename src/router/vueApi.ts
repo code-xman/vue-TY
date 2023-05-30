@@ -13,7 +13,7 @@ const routes: RouteRecordRaw[] = [
         path: 'slot',
         name: 'slot',
         meta: {
-          title: 'vue插槽——slot',
+          title: 'vue插槽',
         },
         component: () => import('@/pages/vueApi/slot/index.vue')
       },
@@ -21,7 +21,7 @@ const routes: RouteRecordRaw[] = [
         path: 'provideInject',
         name: 'provideInject',
         meta: {
-          title: 'vue传参方法——provideInject',
+          title: 'vue传参方法',
         },
         component: () => import('@/pages/vueApi/provideInject/index.vue')
       },
@@ -29,7 +29,7 @@ const routes: RouteRecordRaw[] = [
         path: 'useFunction',
         name: 'useFunction',
         meta: {
-          title: 'template使用引入的方法',
+          title: '使用引入的fn',
         },
         component: () => import('@/pages/vueApi/useFunction/index.vue')
       },

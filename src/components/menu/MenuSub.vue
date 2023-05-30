@@ -6,6 +6,7 @@
     <MenuSub
       v-for="(item, index) in props.child"
       :key="item.index"
+      v-bind="$attrs"
       :index="item.index"
       :title="item.title"
       :path="item.path"
@@ -22,7 +23,16 @@
         :show-after="1000"
         :content="props.title"
       >
-        <div class="menu-item" @click="() => toPage(props.name)">
+        <div
+          class="menu-item"
+          @click="
+            () =>
+              toPage({
+                label: props.title,
+                value: props.name,
+              })
+          "
+        >
           {{ props.title }}
         </div>
       </el-tooltip>
@@ -31,9 +41,10 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, computed } from 'vue';
+import { getCurrentInstance, useAttrs, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { menuType } from './menuList';
+import { LabelValue } from '@/type/common';
 const props = withDefaults(
   defineProps<{
     index: string;
@@ -51,15 +62,18 @@ const props = withDefaults(
   }
 );
 // self --> this
-const self = getCurrentInstance();
+// const self = getCurrentInstance();
+
+const attrs: { onRouteChange?: (rote: LabelValue) => void } = useAttrs();
 
 const hasChild = computed(() => props.child?.length > 0);
 
 // 路由
 const router = useRouter();
-const toPage = (name: string) => {
-  // console.log('url :>> ', url, router);
-  router.push({ name });
+const toPage = (rote: LabelValue) => {
+  // console.log('rote :>> ', rote,);
+  router.push({ name: rote.value as string });
+  attrs.onRouteChange?.(rote);
 };
 </script>
 

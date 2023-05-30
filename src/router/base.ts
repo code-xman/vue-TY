@@ -13,10 +13,10 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/',
         name: 'home',
-        redirect: '/helloworld',
         meta: {
           title: '首页',
         },
+        component: () => import('@/pages/HelloWorld.vue'),
       },
       {
         path: '/helloworld',
