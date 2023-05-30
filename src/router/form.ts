@@ -33,6 +33,14 @@ const routes: RouteRecordRaw[] = [
         },
         component: () => import('@/pages/form/StepForm.vue'),
       },
+      {
+        path: 'formsValidate',
+        name: 'FormsValidate',
+        meta: {
+          title: '多表单验证',
+        },
+        component: () => import('@/pages/form/formsValidate.vue'),
+      }
     ],
   },
 ];
