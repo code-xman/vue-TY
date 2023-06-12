@@ -88,6 +88,7 @@ onMounted(() => {
   :deep(.el-sub-menu) {
     .el-sub-menu__title,
     .el-menu-item {
+      margin-bottom: 4px;
       max-width: 100%;
       min-width: 100%;
       height: 40px;

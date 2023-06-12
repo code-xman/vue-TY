@@ -6,7 +6,7 @@ import { createApp } from 'vue';
 // import './style.css';
 
 // element 样式
-import 'element-plus/dist/index.css'
+import 'element-plus/dist/index.css';
 // import 'element-plus/es/components/message/style/css'
 // 全局共用样式
 import '@/common/style/index.less';
@@ -16,9 +16,18 @@ import App from './App.vue';
 import router from '@/router';
 
 // 自动注册的公用组件
-import myUI from './baseComponents'
+import myUI from './baseComponents';
 
 // mock
 import '../mock/index';
 
-createApp(App).use(router).use(myUI).mount('#app');
+// drag
+import drag from 'v-drag';
+
+createApp(App)
+  .use(router)
+  .use(myUI)
+  .use(drag, {
+    // global configuration
+  })
+  .mount('#app');
