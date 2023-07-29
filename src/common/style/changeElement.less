@@ -1,16 +1,17 @@
 // 修改element样式
 :root {
-  --el-color-primary: #526AEC;
-  --el-color-primary-light-3: #526AEC70;
-  --el-color-primary-light-5: #526AEC50;
-  --el-color-primary-light-7: #526AEC30;
-  --el-color-primary-light-8: #526AEC20;
-  --el-color-primary-light-9: #526AEC10;
-  --el-color-primary-dark-2: #526AEC;
+  --el-color-primary: #526aec;
+  --el-color-primary-light-1: #526aec90;
+  --el-color-primary-light-3: #526aec70;
+  --el-color-primary-light-5: #526aec50;
+  --el-color-primary-light-7: #526aec30;
+  --el-color-primary-light-8: #526aec20;
+  --el-color-primary-light-9: #526aec10;
+  --el-color-primary-dark-2: #526aec;
 }
 
 #body {
-  .el-dialog.my-dialog {    
+  .el-dialog.my-dialog {
     margin: 8vh auto;
     height: 84vh;
     border-radius: 8px;
@@ -21,11 +22,18 @@
       height: calc(100% - 54px);
       padding: 20px;
     }
-    
   }
   .el-table--striped {
     .el-table__body tr.el-table__row--striped td.el-table__cell {
       background: var(--el-color-primary-light-9);
     }
+  }
+  .el-cascader-node__postfix {
+    position: absolute;
+    right: 10px;
+  }
+  .el-cascader-node__prefix {
+    position: absolute;
+    left: 10px;
   }
 }

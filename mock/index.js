@@ -17,3 +17,24 @@ Mock.mock(new RegExp('getOptions'), {
     },
   ],
 });
+
+const varis = () =>
+  Random.pick(
+    ['抵扣次数', '计费结果', '活动折扣', '活动时间', '活动地区'],
+    2,
+    4
+  );
+Mock.mock(new RegExp('getVariable'), {
+  'data|2-4': [
+    {
+      'label|+1': ['抵扣次数', '计费结果', '活动折扣', '活动时间', '活动地区'],
+      'value|+1': [
+        'deductionTimes',
+        'chargingRes',
+        'eventDiscount',
+        'activityTime',
+        'activityArea',
+      ],
+    },
+  ],
+});

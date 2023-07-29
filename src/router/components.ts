@@ -18,12 +18,20 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/components/text/show.vue'),
       },
       {
-        path: 'showTree',
-        name: 'ShowTree',
+        path: 'showTree1',
+        name: 'ShowTree1',
         meta: {
-          title: '树型结构',
+          title: '树型结构1',
         },
         component: () => import('@/components/tree/showTree.vue'),
+      },
+      {
+        path: 'showTree2',
+        name: 'ShowTree2',
+        meta: {
+          title: '树型结构2',
+        },
+        component: () => import('@/pages/tree/showTree2.vue'),
       },
     ],
   },

@@ -12,7 +12,7 @@
   <div class="container flex-1 flex">
     <Menu @routeChange="routeChange" />
     <div class="flex-1 flex column overflow-hide">
-      <div class="flex tags thin-scroll">
+      <div class="flex tags scroll_thin">
         <el-tag
           v-for="tag in tags"
           :key="tag.label"
