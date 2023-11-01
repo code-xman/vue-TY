@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { ref, DefineComponent } from 'vue';
-import { ElInput, FormRules, ElSelect, ElDatePicker } from 'element-plus';
+import { FormRules } from 'element-plus';
 import VSelect from '@/baseComponents/VSelect.vue';
 import { FormItem } from '@/components/form/type';
 import BaseForm from '@/components/form/baseForm.vue';
@@ -26,7 +26,7 @@ const formList: FormItem[] = [
   {
     name: 'name',
     label: '姓名',
-    tag: ElInput,
+    tag: 'ElInput',
     required: true,
     attrs: {
       clearable: true,
@@ -35,7 +35,7 @@ const formList: FormItem[] = [
   {
     name: 'age',
     label: '年龄',
-    tag: ElInput,
+    tag: 'ElInput',
     required: true,
     attrs: {
       type: 'number',
@@ -46,7 +46,7 @@ const formList: FormItem[] = [
   {
     name: 'sex',
     label: '性别',
-    tag: VSelect,
+    tag: 'VSelect',
     required: true,
     attrs: {
       clearable: true,
@@ -65,7 +65,7 @@ const formList: FormItem[] = [
   {
     name: 'birth',
     label: '出生日期',
-    tag: ElDatePicker,
+    tag: 'ElDatePicker',
     attrs: {
       valueFormat: 'YYYY-MM-DD',
     },

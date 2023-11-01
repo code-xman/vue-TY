@@ -1,5 +1,21 @@
 <script lang="tsx">
 import { h, defineComponent, provide, ref, toRefs, PropType } from 'vue';
+import { ElInput, ElSelect, ElDatePicker, ElInputNumber } from 'element-plus';
+import VInput from '@/baseComponents/VInput.vue';
+import VSelect from '@/baseComponents/VSelect.vue';
+
+interface EleType {
+  [key: string]: any;
+}
+
+const ele: EleType = {
+  ElInput,
+  ElSelect,
+  ElDatePicker,
+  ElInputNumber,
+  VInput,
+  VSelect,
+};
 
 const getItemTag = (tag = 'input') => {
   return `${tag}`;
@@ -14,7 +30,7 @@ const getSlots = (tag: any, props: any, children: any, h: any) => {
 export default defineComponent({
   name: 'base-form-item',
   props: {
-    tag: Object,
+    tag: [Object, String] as PropType<any>,
     bind: Object,
     on: Object,
     model: [String, Number, Array, Object, null, undefined] as PropType<any>,
@@ -24,7 +40,7 @@ export default defineComponent({
     },
   },
   setup(props: any, context: any) {
-    const tagName = props.tag;
+    const tagName = ele[props.tag as keyof EleType] || props.tag;
     const eventsObj: any = {};
     Object.keys(props.on).forEach((event) => {
       eventsObj[`on${event}`] = props.on[event];

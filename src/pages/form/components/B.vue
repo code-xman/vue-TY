@@ -12,8 +12,7 @@
 
 <script setup lang="ts">
 import { ref, DefineComponent } from 'vue';
-import { ElInput, FormRules, ElSelect, ElDatePicker } from 'element-plus';
-import VSelect from '@/baseComponents/VSelect.vue';
+import { FormRules } from 'element-plus';
 import { FormItem } from '@/components/form/type';
 import BaseForm from '@/components/form/baseForm.vue';
 
@@ -26,7 +25,7 @@ const formList: FormItem[] = [
   {
     name: 'companyName',
     label: '公司名称',
-    tag: ElInput,
+    tag: 'ElInput',
     required: true,
     attrs: {
       clearable: true,
@@ -35,7 +34,7 @@ const formList: FormItem[] = [
   {
     name: 'year',
     label: '工作年限',
-    tag: ElInput,
+    tag: 'ElInput',
     required: true,
     attrs: {
       type: 'number',
@@ -46,7 +45,7 @@ const formList: FormItem[] = [
   {
     name: 'companyNum',
     label: '公司编号',
-    tag: ElInput,
+    tag: 'ElInput',
     required: true,
     attrs: {
       clearable: true,
@@ -55,7 +54,7 @@ const formList: FormItem[] = [
   {
     name: 'position',
     label: '职位',
-    tag: VSelect,
+    tag: 'VSelect',
     required: true,
     attrs: {
       clearable: true,

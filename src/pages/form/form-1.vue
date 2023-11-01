@@ -15,17 +15,8 @@
 
 <script setup lang="tsx">
 import { reactive, ref, defineComponent, h, DefineComponent } from 'vue';
-import {
-  ElInput,
-  FormRules,
-  ElButton,
-  FormInstance,
-  ElMessage,
-  ElSelect,
-  ElDatePicker,
-} from 'element-plus';
+import { FormRules, ElButton, FormInstance, ElMessage } from 'element-plus';
 import { Search } from '@element-plus/icons-vue';
-import VSelect from '@/baseComponents/VSelect.vue';
 import { FormItem } from '@/components/form/type';
 import BaseForm from '@/components/form/baseForm.vue';
 import Btns from '@/components/button/boxBottomBtn.vue';
@@ -40,7 +31,7 @@ const formList: FormItem[] = [
   {
     name: 'name',
     label: '姓名',
-    tag: ElInput,
+    tag: 'ElInput',
     required: true,
     attrs: {
       clearable: true,
@@ -49,7 +40,7 @@ const formList: FormItem[] = [
   {
     name: 'age',
     label: '年龄',
-    tag: ElInput,
+    tag: 'ElInput',
     required: true,
     attrs: {
       type: 'number',
@@ -60,7 +51,7 @@ const formList: FormItem[] = [
   {
     name: 'oldName',
     label: '曾用名',
-    tag: ElInput,
+    tag: 'ElInput',
     children: {
       prepend: () => (
         <ElButton
@@ -86,7 +77,7 @@ const formList: FormItem[] = [
   {
     name: 'type',
     label: '分类',
-    tag: ElInput,
+    tag: 'ElInput',
     attrs: {
       disabled: true,
     },
@@ -94,7 +85,7 @@ const formList: FormItem[] = [
   {
     name: 'id',
     label: '唯一编码',
-    tag: ElInput,
+    tag: 'ElInput',
     attrs: {
       readonly: true,
     },
@@ -102,7 +93,7 @@ const formList: FormItem[] = [
   {
     name: 'blur',
     label: '测试失焦',
-    tag: ElInput,
+    tag: 'ElInput',
     events: {
       blur: (event: any) => {
         console.log('event.target.value :>> ', event.target.value);
@@ -112,7 +103,7 @@ const formList: FormItem[] = [
   {
     name: 'sex',
     label: '性别',
-    tag: VSelect,
+    tag: 'VSelect',
     required: true,
     attrs: {
       clearable: true,
@@ -131,7 +122,7 @@ const formList: FormItem[] = [
   {
     name: 'birth',
     label: '出生日期',
-    tag: ElDatePicker,
+    tag: 'ElDatePicker',
     attrs: {
       valueFormat: 'YYYY-MM-DD',
     },

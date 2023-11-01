@@ -12,8 +12,6 @@
 
 <script setup lang="ts">
 import { reactive, ref, watch } from 'vue';
-import { ElInput } from 'element-plus';
-import VInput from '@/baseComponents/VInput.vue';
 import { FormItem } from '@/components/form/type';
 import BaseForm from './baseForm.vue';
 
@@ -31,12 +29,12 @@ const formList:FormItem[] = [
   {
     name: 'name',
     label: '姓名',
-    tag: ElInput,
+    tag: 'ElInput',
   },
   {
     name: 'age',
     label: '年龄',
-    tag: VInput,
+    tag: 'VInput',
     attrs: {
       maxlength: 3,
       type: 'number',
@@ -46,7 +44,7 @@ const formList:FormItem[] = [
   {
     name: 'oldName',
     label: '曾用名',
-    tag: ElInput,
+    tag: 'ElInput',
     attrs: {
       clearable: false,
     },
@@ -54,7 +52,7 @@ const formList:FormItem[] = [
   {
     name: 'type',
     label: '分类',
-    tag: ElInput,
+    tag: 'ElInput',
     attrs: {
       disabled: true,
     },
@@ -62,7 +60,7 @@ const formList:FormItem[] = [
   {
     name: 'id',
     label: '唯一编码',
-    tag: ElInput,
+    tag: 'ElInput',
     attrs: {
       readonly: true,
     },
@@ -70,7 +68,7 @@ const formList:FormItem[] = [
   {
     name: 'blur',
     label: '测试失焦',
-    tag: ElInput,
+    tag: 'ElInput',
     events: {
       blur: (event: any) => {
         console.log('event.target.value :>> ', event.target.value);

@@ -32,7 +32,7 @@
 <script setup lang="ts">
 import { DefineComponent, ref, watch, computed } from 'vue';
 // 组件
-import { ElInput, ElInputNumber, ElMessage } from 'element-plus';
+import { ElMessage } from 'element-plus';
 import BaseForm from '@/components/form/baseForm.vue';
 import Btns from '@/components/button/boxBottomBtn.vue';
 // 类型
@@ -73,7 +73,7 @@ const formList: FormItem[] = [
   {
     name: 'id',
     label: '编号',
-    tag: ElInput,
+    tag: 'ElInput',
     required: true,
     attrs: {
       readonly: true,
@@ -82,7 +82,7 @@ const formList: FormItem[] = [
   {
     name: 'name',
     label: '姓名',
-    tag: ElInput,
+    tag: 'ElInput',
     required: true,
     attrs: {
       clearable: true,
@@ -91,7 +91,7 @@ const formList: FormItem[] = [
   {
     name: 'age',
     label: '年龄',
-    tag: ElInputNumber,
+    tag: 'ElInputNumber',
     required: true,
     attrs: {
       max: 999,
@@ -103,7 +103,7 @@ const formList: FormItem[] = [
   {
     name: 'email',
     label: '邮件地址',
-    tag: ElInput,
+    tag: 'ElInput',
     required: true,
     attrs: {
       clearable: true,
