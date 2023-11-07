@@ -1,5 +1,5 @@
 <template>
-  <div class="lightText pd-5 mg-t-5 mg-b-5" :style="styleData[type]">
+  <div class="lightText p-5 mt-5 mb-5" :style="styleData[type]">
     <slot></slot>
   </div>
 </template>

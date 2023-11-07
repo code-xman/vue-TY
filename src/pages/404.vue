@@ -11,4 +11,4 @@ const self = getCurrentInstance();
 const a = '111';
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="less" scoped></style>

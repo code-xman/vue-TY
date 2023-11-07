@@ -14,7 +14,7 @@
         :options="options"
         clearable
         :show-all-levels="false"
-        class="mg-r-5"
+        class="mr-5"
         @change="handleChange"
       />
       <template v-if="field[0] !== '02'">
@@ -23,7 +23,7 @@
           v-model="includeType"
           placeholder="请选择"
           clearable
-          class="mg-r-5"
+          class="mr-5"
         >
           <el-option
             v-for="item in includeTypes"

@@ -1,5 +1,5 @@
 <template>
-  <div class="a mg-t-10">
+  <div class="a mt-10">
     <LightText>子组件通过inject(dataname)来获取数据。</LightText>
     <LightText type="warning">
       注：父级传入的非响应式数据，在子组件里inject后，在当前会变为响应式的数据。

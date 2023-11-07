@@ -28,7 +28,7 @@
           {{ tag.label }}
         </el-tag>
       </div>
-      <div class="flex-1 box-border mg-10">
+      <div class="flex-1 box-border m-10">
         <!-- <el-scrollbar height="100%"> -->
         <router-view />
         <!-- </el-scrollbar> -->
