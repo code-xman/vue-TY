@@ -11,7 +11,7 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: 'slot',
-        name: 'slot',
+        name: 'Slot',
         meta: {
           title: 'vue插槽',
         },
@@ -19,7 +19,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'provideInject',
-        name: 'provideInject',
+        name: 'ProvideInject',
         meta: {
           title: 'vue传参方法',
         },
@@ -27,11 +27,19 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'useFunction',
-        name: 'useFunction',
+        name: 'UseFunction',
         meta: {
           title: '使用引入的fn',
         },
         component: () => import('@/pages/vueApi/useFunction/index.vue')
+      },
+      {
+        path: 'useHooks',
+        name: 'UseHooks',
+        meta: {
+          title: '自定义hook',
+        },
+        component: () => import('@/pages/vueApi/useHooks/index.vue')
       },
     ],
   }

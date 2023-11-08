@@ -9,6 +9,7 @@ Mock.setup({
   timeout: '200-600',
 });
 
+// 选项
 Mock.mock(new RegExp('getOptions'), {
   'data|2-4': [
     {
@@ -24,6 +25,7 @@ const varis = () =>
     2,
     4
   );
+// 选项
 Mock.mock(new RegExp('getVariable'), {
   'data|2-4': [
     {
@@ -37,4 +39,9 @@ Mock.mock(new RegExp('getVariable'), {
       ],
     },
   ],
+});
+
+// 验证码
+Mock.mock(new RegExp('getValidateCode'), {
+  'code': /^[a-zA-Z0-9]{6}$/,
 });
