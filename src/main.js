@@ -1,4 +1,6 @@
 import { createApp } from 'vue';
+// pinia
+import { createPinia } from 'pinia'
 // element 全局引入 --> 自动按需引入
 // import ElementPlus from 'element-plus';
 // import 'element-plus/dist/index.css';
@@ -24,8 +26,11 @@ import '../mock/index';
 // drag
 import drag from 'v-drag';
 
+const pinia = createPinia()
+
 createApp(App)
   .use(router)
+  .use(pinia)
   .use(myUI)
   .use(drag, {
     // global configuration

@@ -13,10 +13,10 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
-import LightText from '@/components/text/lightText.vue';
+import LightText, { LightTextType } from '@/components/text/lightText.vue';
 
-const type = ref('base')
-const changeType = (txtType: string) => {
+const type = ref<LightTextType>('base')
+const changeType = (txtType: LightTextType) => {
   type.value = txtType
 }
 

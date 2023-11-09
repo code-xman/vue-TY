@@ -5,9 +5,11 @@
 </template>
 
 <script setup lang="ts">
+export type LightTextType = 'base' | 'success' | 'warning' | 'error' | 'info'; 
+
 withDefaults(
   defineProps<{
-    type?: 'base' | 'success' | 'warning' | 'error' | 'info';
+    type?: LightTextType;
   }>(),
   {
     type: 'base'

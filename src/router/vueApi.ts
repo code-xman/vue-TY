@@ -41,6 +41,14 @@ const routes: RouteRecordRaw[] = [
         },
         component: () => import('@/pages/vueApi/useHooks/index.vue')
       },
+      {
+        path: 'piniaTest',
+        name: 'PiniaTest',
+        meta: {
+          title: '使用Pinia',
+        },
+        component: () => import('@/pages/vueApi/piniaTest/index.vue')
+      },
     ],
   }
 ];

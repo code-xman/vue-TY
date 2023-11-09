@@ -1,12 +1,26 @@
-@len: 10;
+@import './const.less';
 
+@len: 10; // 创造间距样式5的倍数循环次数
+@lenMini: 4; // 创造间距样式2的倍数循环次数
+@bw: 5; // border-width
+
+// 处理2/4/6/8
+.loopMini(@className, @name, @i) when (@i <= @lenMini) {
+  @num: @i * 2;
+  .@{className}-@{num}{
+    @{name}: @num * 1px;
+  }
+}
+
+// 处理5的倍数
 .loop(@className, @name, @i) when (@i <= @len) {
   @num: @i * 5;
 
   .@{className}-@{num}{
     @{name}: @num * 1px;
   }
-  .loop(@className, @name, @i + 1)
+  .loopMini(@className, @name, @i);
+  .loop(@className, @name, @i + 1);
 }
 
 .loop(p, padding, 1);
@@ -20,3 +34,14 @@
 .loop(mb, margin-bottom, 1);
 .loop(mr, margin-right, 1);
 .loop(mt, margin-top, 1);
+
+// 处理border
+.loopB(@className, @name, @i) when (@i <= @bw) {
+  .@{className}-@{i}{
+    @{name}: @i * 1px solid @color-border;
+  }
+  
+  .loopB(@className, @name, @i + 1)
+}
+
+.loopB(bt, border-top, 1);
