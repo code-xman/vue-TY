@@ -38,10 +38,13 @@
 // 处理border
 .loopB(@className, @name, @i) when (@i <= @bw) {
   .@{className}-@{i}{
-    @{name}: @i * 1px solid @color-border;
+    @{name}: @i * 1px solid var(--ty-color-border);
   }
   
   .loopB(@className, @name, @i + 1)
 }
 
 .loopB(bt, border-top, 1);
+.loopB(br, border-right, 1);
+.loopB(bb, border-bottom, 1);
+.loopB(bl, border-left, 1);

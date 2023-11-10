@@ -33,6 +33,14 @@ const routes: RouteRecordRaw[] = [
         },
         component: () => import('@/pages/tree/showTree2.vue'),
       },
+      {
+        path: 'modalSection',
+        name: 'ModalSection',
+        meta: {
+          title: 'part包裹组件',
+        },
+        component: () => import('@/components/ModalSection/show.vue'),
+      },
     ],
   },
 ];
