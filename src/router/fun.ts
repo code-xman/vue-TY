@@ -17,6 +17,14 @@ const routes: RouteRecordRaw[] = [
         },
         component: () => import('@/pages/fun/Drag/index.vue'),
       },
+      {
+        path: 'domDrag',
+        name: 'DomDrag',
+        meta: {
+          title: 'dom拖动',
+        },
+        component: () => import('@/pages/fun/DomDrag/index.vue')
+      },
     ],
   },
 ];
