@@ -15,8 +15,8 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: '表格拖动排序',
         },
-        component: () => import('@/pages/table/sortTable.vue')
-      },
+        component: () => import('@/pages/table/SortTable/index.vue')
+      }
     ]
   }
 ];
