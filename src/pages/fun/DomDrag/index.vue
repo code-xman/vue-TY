@@ -7,21 +7,37 @@
         </div>
       </div>
       <div class="content flex-1">
-        <div class="form-content">
+        <el-form
+          ref="formRef"
+          class="form-content flex flex-wrap baseForm"
+          :model="valObj"
+          label-position="left"
+        >
           <div
             v-for="item in contents"
             :key="item.id"
             class="item"
-            :class="`item_${item.type}`"
+            :style="`width: ${item.width || 'calc(50% - 5px)'}`"
           >
-            {{ item.type }}
+            <el-form-item
+              :prop="item.name"
+              :label="item.label"
+              :label-width="160"
+            >
+              <BaseFormItem
+                :tag="item.tag"
+                :bind="item.attrs"
+                :model="valObj[item.name]"
+                @valChange="(val) => valChange(val, item.name)"
+              ></BaseFormItem>
+            </el-form-item>
             <div class="remove-box">
               <el-icon class="icon_remove" @click="() => remove(item)">
                 <CloseBold />
               </el-icon>
             </div>
           </div>
-        </div>
+        </el-form>
       </div>
     </div>
   </div>
@@ -31,12 +47,45 @@
 import { onMounted, ref } from 'vue';
 import { CloseBold } from '@element-plus/icons-vue';
 import Sortable from 'sortablejs';
-// import BaseFormItem from '@/baseComponents/BaseFormItem.vue';
+import BaseFormItem from '@/baseComponents/BaseFormItem.vue';
 
+/** 表单每项的属性类型 */
 interface ItemObj {
   id: string;
   type: string;
+  tag: string;
+  name: string;
+  label: string;
+  width?: string;
+  attrs?: any;
 }
+
+/** 表单每项的基础属性 */
+const ItemAttrObj: {
+  [key: string]: Partial<Omit<ItemObj, 'tag'>> & { tag: string };
+} = {
+  input: {
+    tag: 'ElInput',
+  },
+  select: {
+    tag: 'ElSelect',
+    attrs: {
+      clearable: true,
+      options: [],
+    },
+  },
+  textarea: {
+    tag: 'ElInput',
+    width: '100%',
+    attrs: {
+      type: 'textarea',
+      autosize: {
+        minRows: 4,
+        maxRows: 6,
+      },
+    },
+  },
+};
 
 const options = ref(<string[]>['input', 'select', 'textarea']);
 const contents = ref(<ItemObj[]>[]);
@@ -74,10 +123,17 @@ const initSortable = () => {
     animation: 150, //动画
     handle: '.item', //指定拖拽目标，点击此目标才可拖拽元素(此例中设置操作按钮拖拽)
     onAdd: (evt: any) => {
+      const id = new Date().getTime().toString();
       contents.value.splice(evt.newIndex, 0, {
-        id: new Date().getTime().toString(),
+        attrs: {},
+        ...ItemAttrObj[checkItem.value],
+        id: id,
         type: checkItem.value,
+        name: `${checkItem.value}${id}`,
+        label: `${checkItem.value}${id}`,
       });
+
+      valObj.value[`${checkItem.value}${id}`] = '';
     },
   });
 };
@@ -89,6 +145,12 @@ const remove = (item: ItemObj) => {
 onMounted(() => {
   initSortable();
 });
+
+const valObj = ref(<any>{});
+
+const valChange = (val: any, name: string) => {
+  valObj.value[name] = val;
+};
 </script>
 
 <style lang="less" scoped>
@@ -134,11 +196,11 @@ onMounted(() => {
     .item {
       margin-bottom: 10px;
       box-sizing: border-box;
-      border: 1px solid #409eff;
+      border: 1px dashed #409eff;
       border-radius: 5px;
       width: calc(50% - 5px);
-      height: 43px;
-      padding: 10px 10px;
+      min-height: 48px;
+      padding: 8px;
       text-align: center;
       color: #409eff;
       background-color: #ecf5ff;
@@ -146,10 +208,6 @@ onMounted(() => {
       overflow: hidden;
 
       position: relative;
-
-      &.item_textarea {
-        width: 100%;
-      }
 
       .remove-box {
         position: absolute;
@@ -170,6 +228,19 @@ onMounted(() => {
           margin-left: -4px;
           margin-top: 8px;
         }
+      }
+    }
+
+    :deep(.el-form-item) {
+      margin-bottom: 0;
+      .el-form-item__label {
+        display: inline-block;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      .el-select {
+        width: 100%;
       }
     }
   }

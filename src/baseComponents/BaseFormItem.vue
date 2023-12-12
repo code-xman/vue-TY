@@ -42,14 +42,18 @@ export default defineComponent({
   setup(props: any, context: any) {
     const tagName = ele[props.tag as keyof EleType] || props.tag;
     const eventsObj: any = {};
-    Object.keys(props.on).forEach((event) => {
-      eventsObj[`on${event}`] = props.on[event];
-    });
+    if (props.on) {
+      Object.keys(props.on).forEach((event) => {
+        eventsObj[`on${event}`] = props.on[event];
+      });
+    }
     // const slots = getSlots(tagName, props, context.children, h);
     const slots: any = {};
-    Object.keys(props.children || {})?.forEach((name) => {
-      slots[name] = props.children[name];
-    });
+    if (props.children) {
+      Object.keys(props.children || {})?.forEach((name) => {
+        slots[name] = props.children[name];
+      });
+    }
 
     return () =>
       h(
