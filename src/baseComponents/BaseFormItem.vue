@@ -1,6 +1,6 @@
 <script lang="tsx">
 import { h, defineComponent, provide, ref, toRefs, PropType } from 'vue';
-import { ElInput, ElSelect, ElDatePicker, ElInputNumber } from 'element-plus';
+import { ElInput, ElSelect, ElDatePicker, ElInputNumber, ElSwitch, } from 'element-plus';
 import VInput from '@/baseComponents/VInput.vue';
 import VSelect from '@/baseComponents/VSelect.vue';
 
@@ -13,6 +13,8 @@ const ele: EleType = {
   ElSelect,
   ElDatePicker,
   ElInputNumber,
+  ElSwitch,
+
   VInput,
   VSelect,
 };
@@ -31,12 +33,15 @@ export default defineComponent({
   name: 'base-form-item',
   props: {
     tag: [Object, String] as PropType<any>,
-    bind: Object,
+    bind: {
+      type: Object,
+      default: () => ({}),
+    },
     on: Object,
-    model: [String, Number, Array, Object, null, undefined] as PropType<any>,
+    model: [String, Number, Array, Object, Boolean, null, undefined] as PropType<any>,
     children: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
   },
   setup(props: any, context: any) {

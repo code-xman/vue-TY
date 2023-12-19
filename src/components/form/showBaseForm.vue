@@ -30,6 +30,9 @@ const formList:FormItem[] = [
     name: 'name',
     label: '姓名',
     tag: 'ElInput',
+    attrs: {
+      clearable: false,
+    },
   },
   {
     name: 'age',
@@ -42,9 +45,9 @@ const formList:FormItem[] = [
     },
   },
   {
-    name: 'oldName',
-    label: '曾用名',
-    tag: 'ElInput',
+    name: 'graduate',
+    label: '是否毕业',
+    tag: 'ElSwitch',
     attrs: {
       clearable: false,
     },
@@ -80,7 +83,7 @@ const formList:FormItem[] = [
 const valueObj = ref({
   name: '',
   age: '',
-  oldName: '',
+  graduate: false,
   type: '暂不填写，后续统一分类',
   id: 'asjhd123adf81rlkj94',
   blur: '',
