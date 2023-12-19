@@ -28,6 +28,14 @@ export interface Attrs {
   options?: LV[];
   /** datepicker 数据格式化 */
   valueFormat?: string;
+  /** switch 的状态为 on 时文字描述  */
+  'active-text'?: string;
+  /** switch 的状态为 off 时的文字描述  */
+  'inactive-text'?: string;
+  /** switch 状态为 on 时的值 */
+  'active-value'?: boolean | string | number;
+  /** switch 状态为 off 时的值 */
+  'inactive-value'?: boolean | string | number;
 }
 
 export interface FormItem {
@@ -50,6 +58,6 @@ export interface FormItem {
     click?: (event: any) => void;
     change?: (event: any) => void;
     fouce?: (event: any) => void;
-  },
+  };
   children?: any;
 }

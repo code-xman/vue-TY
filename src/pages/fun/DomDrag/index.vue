@@ -23,12 +23,12 @@
             <el-form-item
               :prop="item.name"
               :label="item.label"
-              :label-width="160"
+              :required="item.required || false"
               @click.stop="() => formItemClick(item)"
             >
               <BaseFormItem
                 :tag="item.tag"
-                :bind="item.attrs"
+                :bind="item.attrs || {}"
                 :model="valObj[item.name]"
                 @click.stop
                 @valChange="(val) => valChange(val, item.name)"
@@ -44,7 +44,7 @@
       </div>
       <div class="attrs scroll_thin">
         <BaseForm
-          v-bind="{ labelPosition: 'top' }"
+          v-bind="{ labelPosition: 'left' }"
           :formList="formList"
           v-model:valueObj="formValue"
         ></BaseForm>
@@ -60,7 +60,9 @@ import Sortable from 'sortablejs';
 import BaseForm from '@/components/form/baseForm.vue';
 import { FormItem } from '@/components/form/type';
 import BaseFormItem from '@/baseComponents/BaseFormItem.vue';
-import { FormItemType, FormItemAttrObj, FormValueObj } from './baseData';
+import { isEmpty } from '@/common/utils/common';
+import { FormItemType } from '@/pages/fun/DomDrag/FormItemAttrs/base';
+import { FormItemAttrObj, FormValueObj } from './baseData';
 
 /** 表单每项的属性类型 */
 interface ItemObj {
@@ -69,6 +71,7 @@ interface ItemObj {
   tag: string;
   name: string;
   label: string;
+  required?: boolean;
   width?: string;
   attrs?: any;
 }
@@ -89,7 +92,7 @@ const ItemAttrObj: {
   },
   textarea: {
     tag: 'ElInput',
-    width: '100%',
+    // width: '100%',
     attrs: {
       type: 'textarea',
       autosize: {
@@ -174,7 +177,7 @@ const formItemClick = (item: ItemObj) => {
     ...FormValueObj[item.type],
   };
   // 获取attrs的表单的key值数组
-  const keys = formList.value.map((f) => f.name);
+  const keys = formList.value?.map((f) => f.name);
   // 循环keys，给选中的contents的item的 attrs部分 将已有随机值给对应的属性表单. eg.label
   keys.forEach((key) => {
     formValue.value[key] = item[key as keyof ItemObj];
@@ -192,8 +195,9 @@ watch(
     const keys = Object.keys(formValue.value);
     // 循环keys，选中的contents的item 将attrs的数据 --> contents部分
     keys.forEach((key) => {
+      if (isEmpty(formValue.value[key])) return;
       // 判断是否是在attrs里面
-      const inAttrs = formList.value.find(f => f.name === key)?.inAttrs;
+      const inAttrs = formList.value.find((f) => f.name === key)?.inAttrs;
       if (inAttrs) {
         // 是 给到对应的formItem的attrs
         sItem.attrs[key as keyof ItemObj] = formValue.value[key];
@@ -313,7 +317,7 @@ const valChange = (val: any, name: string) => {
   box-sizing: border-box;
   border: 1px solid #ddd;
   border-radius: 5px;
-  width: 200px;
+  width: 300px;
   height: 100%;
   overflow: auto;
 
