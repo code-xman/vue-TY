@@ -3,6 +3,7 @@ import { h, defineComponent, provide, ref, toRefs, PropType } from 'vue';
 import { ElInput, ElSelect, ElDatePicker, ElInputNumber, ElSwitch, } from 'element-plus';
 import VInput from '@/baseComponents/VInput.vue';
 import VSelect from '@/baseComponents/VSelect.vue';
+import EditOptions from '@/components/EditOptions/index.vue';
 
 interface EleType {
   [key: string]: any;
@@ -17,6 +18,7 @@ const ele: EleType = {
 
   VInput,
   VSelect,
+  EditOptions,
 };
 
 const getItemTag = (tag = 'input') => {

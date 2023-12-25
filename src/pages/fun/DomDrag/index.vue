@@ -2,7 +2,7 @@
   <div class="Dom-Drag flex-all column">
     <div class="flex-1 overflow-auto flex">
       <div class="options scroll_thin">
-        <div v-for="item in options" :key="item" :id="item" class="item">
+        <div v-for="item in options" :key="item" :id="item" class="option-item">
           {{ item }}
         </div>
       </div>
@@ -16,7 +16,8 @@
           <div
             v-for="item in contents"
             :key="item.id"
-            class="item"
+            class="content-item"
+            :class="{ active: formItemSelectedId === item.id }"
             :style="`width: ${item.width || 'calc(50% - 5px)'}`"
             @click.self="() => formItemClick(item)"
           >
@@ -54,56 +55,22 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { nextTick, onMounted, ref, watch } from 'vue';
 import { CloseBold } from '@element-plus/icons-vue';
 import Sortable from 'sortablejs';
 import BaseForm from '@/components/form/baseForm.vue';
 import { FormItem } from '@/components/form/type';
 import BaseFormItem from '@/baseComponents/BaseFormItem.vue';
 import { isEmpty } from '@/common/utils/common';
-import { FormItemType } from '@/pages/fun/DomDrag/FormItemAttrs/base';
-import { FormItemAttrObj, FormValueObj } from './baseData';
+import { FormItemType, ItemObj } from '@/pages/fun/DomDrag/type';
+import { optionData } from '@/pages/fun/DomDrag/baseAttrs';
+import {
+  FormItemAttrObj,
+  FormValueObj,
+  ItemAttrObj,
+} from '@/pages/fun/DomDrag/baseData';
 
-/** 表单每项的属性类型 */
-interface ItemObj {
-  id: string;
-  type: string;
-  tag: string;
-  name: string;
-  label: string;
-  required?: boolean;
-  width?: string;
-  attrs?: any;
-}
-
-/** 表单每项的基础属性 */
-const ItemAttrObj: {
-  [key: string]: Partial<Omit<ItemObj, 'tag'>> & { tag: string };
-} = {
-  input: {
-    tag: 'ElInput',
-  },
-  select: {
-    tag: 'ElSelect',
-    attrs: {
-      clearable: true,
-      options: [],
-    },
-  },
-  textarea: {
-    tag: 'ElInput',
-    // width: '100%',
-    attrs: {
-      type: 'textarea',
-      autosize: {
-        minRows: 4,
-        maxRows: 6,
-      },
-    },
-  },
-};
-
-const options = ref(<string[]>['input', 'select', 'textarea']);
+const options = ref(<string[]>[...optionData]);
 const contents = ref(<ItemObj[]>[]);
 const selectedItem = ref(<string>'');
 
@@ -118,7 +85,7 @@ const initSortable = () => {
       put: false, // 不允许拖拽进这个列表
     },
     animation: 150, //动画
-    handle: '.item', //指定拖拽目标，点击此目标才可拖拽元素(此例中设置操作按钮拖拽)
+    handle: '.option-item', //指定拖拽目标，点击此目标才可拖拽元素(此例中设置操作按钮拖拽)
     sort: false, // 设为false，禁止sort
     onChoose: (evt: any) => {
       // console.log('evt :>> ', evt);
@@ -137,7 +104,7 @@ const initSortable = () => {
   new Sortable.create(formContent, {
     group: { name: 'formContent', put: true },
     animation: 150, //动画
-    handle: '.item', //指定拖拽目标，点击此目标才可拖拽元素(此例中设置操作按钮拖拽)
+    handle: '.content-item', //指定拖拽目标，点击此目标才可拖拽元素(此例中设置操作按钮拖拽)
     onAdd: (evt: any) => {
       const id = new Date().getTime().toString();
       contents.value.splice(evt.newIndex, 0, {
@@ -230,7 +197,7 @@ const valChange = (val: any, name: string) => {
   height: 100%;
   padding: 10px;
   overflow: auto;
-  .item {
+  .option-item {
     margin-bottom: 10px;
     box-sizing: border-box;
     border: 1px solid #409eff;
@@ -260,7 +227,7 @@ const valChange = (val: any, name: string) => {
     justify-content: space-between;
     align-content: flex-start;
 
-    .item {
+    .content-item {
       margin-bottom: 10px;
       box-sizing: border-box;
       border: 1px dashed #409eff;
@@ -295,6 +262,12 @@ const valChange = (val: any, name: string) => {
           margin-left: -4px;
           margin-top: 8px;
         }
+      }
+
+      &.active {
+        border: 1px dashed #67c23a;
+        color: #67c23a;
+        background-color: #f0f9eb;
       }
     }
 

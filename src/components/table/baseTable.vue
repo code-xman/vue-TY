@@ -8,7 +8,7 @@
 <template>
   <div class="base-table"></div>
   <el-table
-    v-bind="tableProps.attrs"
+    v-bind="{ ...tableBaseAttr, ...tableProps.attrs }"
     ref="baseTableRef"
     class="baseTable"
     :data="props.tableData"
@@ -25,7 +25,7 @@
       :align="col.align || 'left'"
     />
     <el-table-column
-      v-if="!!optionCol"
+      v-if="needOperate || JSON.stringify(optionCol) !== '{}'"
       fixed="right"
       v-bind="optionCol.attrs"
       :label="optionCol.optionLabel || '操作'"
@@ -44,13 +44,14 @@ import { TablePropsType, columnsType, optionColType } from './type';
 const props = withDefaults(
   defineProps<{
     /** 公共表格的属性 */
-    tableProps: TablePropsType;
+    tableProps?: TablePropsType;
     /** 表格数据 */
     tableData: any[];
     /** 表格列配置 */
     columns: columnsType[];
     /** 表格是否需要选择框 */
     selection?: boolean;
+    needOperate?: boolean;
     /** 操作列配置 */
     optionCol?: optionColType;
   }>(),
@@ -59,11 +60,16 @@ const props = withDefaults(
     tableData: () => [],
     columns: () => [],
     selection: false,
+    needOperate: false,
     optionCol: () => ({}),
   }
 );
 // table ref
-const baseTableRef  = ref<DefineComponent | null>(null)
+const baseTableRef = ref<DefineComponent | null>(null);
+const tableBaseAttr = {
+  border: true,
+  stripe: true,
+};
 </script>
 
 <style lang="less" scoped></style>

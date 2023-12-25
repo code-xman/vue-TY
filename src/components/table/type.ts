@@ -14,6 +14,8 @@ export interface columnsType {
   prop: string;
   /** 展示名称 */
   label: string;
+  /** 宽度 */
+  width?: string;
   /** 最小宽度 */
   minWidth?: string;
   /** 表头文字对齐 */
@@ -24,6 +26,11 @@ export interface columnsType {
   attrs?: Partial<TableColumnInstance>;
   // 感觉和上面这个差不多，不晓得用哪个
   // attrs?: Partial<TableColumnCtx<any>>;
+  /** 插槽 */
+  slot?: {
+    default?: any;
+    header?: any;
+  };
 }
 
 /** 操作列配置 */

@@ -1,17 +1,42 @@
+import { FormItemType, ItemObj, } from '@/pages/fun/DomDrag/type';
 import {
-  FormItemType,
-  FormItemAttrBase,
-  FormValueBase,
-} from '@/pages/fun/DomDrag/FormItemAttrs/base';
+  FormItemAttrInput,
+  FormItemAttrSelect,
+  FormItemAttrTextarea,
+  FormValueCommonObj,
+} from '@/pages/fun/DomDrag/baseAttrs';
+
+/** 表单每项的基础属性 */
+export const ItemAttrObj: {
+  [key: string]: Partial<Omit<ItemObj, 'tag'>> & { tag: string };
+} = {
+  input: {
+    tag: 'ElInput',
+  },
+  select: {
+    tag: 'VSelect',
+    attrs: {
+      clearable: true,
+      options: [],
+    },
+  },
+  textarea: {
+    tag: 'ElInput',
+    // width: '100%',
+    attrs: {
+      type: 'textarea',
+      autosize: {
+        minRows: 4,
+        maxRows: 6,
+      },
+    },
+  },
+};
 
 export const FormItemAttrObj: { [key: string]: FormItemType[] } = {
-  input: [...FormItemAttrBase],
-  select: [...FormItemAttrBase.filter(e => !['maxlength'].includes(e.name))],
-  textarea: [...FormItemAttrBase],
+  input: FormItemAttrInput,
+  select: FormItemAttrSelect,
+  textarea: FormItemAttrTextarea,
 };
 
-export const FormValueObj: { [key: string]: any } = {
-  input: { ...FormValueBase },
-  select: { ...FormValueBase },
-  textarea: { ...FormValueBase },
-};
+export const FormValueObj: { [key: string]: any } = FormValueCommonObj;
