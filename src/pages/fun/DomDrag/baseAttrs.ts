@@ -60,7 +60,7 @@ export const FormItemAttrTextarea: FormItemType[] = [...FormItemAttrBase];
 export const FormValueCommon = {
   label: '',
   required: false,
-  width: '50%',
+  width: 'calc(50% - 5px)', // 展示默认 50%，实际为 calc(50% - 5px)
 };
 
 /** attrs 里的表单数据 各项分离版 */
@@ -71,15 +71,11 @@ export const FormValueCommonObj: { [key: string]: any } = {
   },
   select: {
     ...FormValueCommon,
-    options: [
-      {
-        label: '111',
-        value: '222',
-      },
-    ],
+    options: [],
   },
   textarea: {
     ...FormValueCommon,
     maxlength: '',
+    width: '100%',
   },
 };

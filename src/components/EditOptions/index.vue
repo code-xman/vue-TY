@@ -90,15 +90,10 @@ const showModal = ref(<boolean>false);
 watch(showModal, (val) => {
   if (!val) {
     tableData.value = [];
-  }
-});
-
-watch(
-  () => props.modelValue,
-  () => {
+  } else {
     tableData.value = props.modelValue;
   }
-);
+});
 
 const updateOptions = () => {
   emit('update:modelValue', tableData.value);

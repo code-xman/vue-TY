@@ -17,7 +17,10 @@
             v-for="item in contents"
             :key="item.id"
             class="content-item"
-            :class="{ active: formItemSelectedId === item.id }"
+            :class="[
+              formItemSelectedId === item.id ? 'active' : '',
+              `item-${item.type}`,
+            ]"
             :style="`width: ${item.width || 'calc(50% - 5px)'}`"
             @click.self="() => formItemClick(item)"
           >
@@ -47,7 +50,7 @@
         <BaseForm
           v-bind="{ labelPosition: 'left' }"
           :formList="formList"
-          v-model:valueObj="formValue"
+          v-model:valueObj="formItemSelectedValue"
         ></BaseForm>
       </div>
     </div>
@@ -55,11 +58,12 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { CloseBold } from '@element-plus/icons-vue';
 import Sortable from 'sortablejs';
+import { cloneDeep } from 'lodash';
+
 import BaseForm from '@/components/form/baseForm.vue';
-import { FormItem } from '@/components/form/type';
 import BaseFormItem from '@/baseComponents/BaseFormItem.vue';
 import { isEmpty } from '@/common/utils/common';
 import { FormItemType, ItemObj } from '@/pages/fun/DomDrag/type';
@@ -109,7 +113,8 @@ const initSortable = () => {
       const id = new Date().getTime().toString();
       contents.value.splice(evt.newIndex, 0, {
         attrs: {},
-        ...ItemAttrObj[selectedItem.value],
+        // ItemAttrObj 是公用的，不深拷贝会影响同类型的其他item的引用对象 eg.attrs.options
+        ...cloneDeep(ItemAttrObj[selectedItem.value]),
         id: id,
         type: selectedItem.value,
         name: `${selectedItem.value}${id}`,
@@ -117,6 +122,9 @@ const initSortable = () => {
       });
 
       valObj.value[`${selectedItem.value}${id}`] = '';
+
+      // 给选中的contents的item的 attrs部分 对应的属性表单赋默认值
+      formValue.value[id] = cloneDeep(FormValueObj[selectedItem.value]);
     },
   });
 };
@@ -128,10 +136,12 @@ const removeFn = (item: ItemObj) => {
 
 // attrs各项
 const formList = ref(<FormItemType[]>[]);
-// attrs数据
+// attrs数据 contents的每一项的formValue的数据 结构为：{id1: {}, id2: {},...}
 const formValue = ref(<any>{});
-// 选中进行完善的formItem id
+// 选中进行完善的formItem的 id
 const formItemSelectedId = ref(<string>'');
+// 选中进行完善的formItem的 formValue
+const formItemSelectedValue = ref(<any>{});
 
 // 点击某项
 const formItemClick = (item: ItemObj) => {
@@ -139,40 +149,54 @@ const formItemClick = (item: ItemObj) => {
   formItemSelectedId.value = item.id;
   // 给选中的contents的item的 attrs部分 对应的属性表单
   formList.value = FormItemAttrObj[item.type];
-  // 给选中的contents的item的 attrs部分 对应的属性表单赋默认值
-  formValue.value = {
-    ...FormValueObj[item.type],
-  };
   // 获取attrs的表单的key值数组
   const keys = formList.value?.map((f) => f.name);
   // 循环keys，给选中的contents的item的 attrs部分 将已有随机值给对应的属性表单. eg.label
-  keys.forEach((key) => {
-    formValue.value[key] = item[key as keyof ItemObj];
+  keys.forEach((key, i) => {
+    const inAttrs = formList.value[i]?.inAttrs;
+    if (inAttrs) {
+      formValue.value[formItemSelectedId.value][key] =
+        item.attrs[key as keyof ItemObj];
+    } else {
+      formValue.value[formItemSelectedId.value][key] =
+        item[key as keyof ItemObj];
+    }
   });
+
+  formItemSelectedValue.value = formValue.value[formItemSelectedId.value] || {};
 };
 
+// 监听 attrs 部分的form的值的变动，同步修改contents的属性
 watch(
-  () => formValue.value,
+  () => formItemSelectedValue.value,
   () => {
+    formValue.value[formItemSelectedId.value] = cloneDeep(
+      formItemSelectedValue.value
+    );
     const sItem: ItemObj | undefined = contents.value.find(
       (item) => item.id === formItemSelectedId.value
     );
     if (!sItem) return;
     // 获取attrs的表单的key值数组
-    const keys = Object.keys(formValue.value);
+    const keys = Object.keys(formValue.value[formItemSelectedId.value]);
     // 循环keys，选中的contents的item 将attrs的数据 --> contents部分
     keys.forEach((key) => {
-      if (isEmpty(formValue.value[key])) return;
+      if (isEmpty(formValue.value[formItemSelectedId.value]?.[key])) return;
       // 判断是否是在attrs里面
       const inAttrs = formList.value.find((f) => f.name === key)?.inAttrs;
       if (inAttrs) {
         // 是 给到对应的formItem的attrs
-        sItem.attrs[key as keyof ItemObj] = formValue.value[key];
+        sItem.attrs[key as keyof ItemObj] =
+          formValue.value[formItemSelectedId.value]?.[key];
       } else {
         // 否 给到对应的formItem
-        sItem[key as keyof ItemObj] = formValue.value[key];
+        sItem[key as keyof ItemObj] =
+          formValue.value[formItemSelectedId.value]?.[key];
       }
     });
+  },
+  {
+    deep: true,
   }
 );
 
