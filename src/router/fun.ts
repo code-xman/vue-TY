@@ -18,10 +18,10 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/pages/fun/Drag/index.vue'),
       },
       {
-        path: 'domDrag',
-        name: 'DomDrag',
+        path: 'customForm',
+        name: 'CustomForm',
         meta: {
-          title: 'dom拖动',
+          title: '自定义表单',
         },
         component: () => import('@/pages/fun/DomDrag/index.vue')
       },

@@ -3,6 +3,17 @@ import { FormItemType } from '@/pages/fun/DomDrag/type';
 /** options 内容：左侧可使用组件 */
 export const optionData: string[] = ['input', 'select', 'textarea'];
 
+/** 不在attrs的属性 */
+export const outAttrs: string[] = [
+  'id',
+  'type',
+  'tag',
+  'name',
+  'label',
+  'required',
+  'width',
+];
+
 /** attrs 里的表单属性 基础版 */
 export const FormItemAttrBase: FormItemType[] = [
   {
@@ -31,30 +42,43 @@ export const FormItemAttrBase: FormItemType[] = [
       'inactive-value': 'calc(50% - 5px)',
     },
   },
+];
+
+/** input */
+export const FormItemAttrInput: FormItemType[] = [
+  ...FormItemAttrBase,
   {
     name: 'maxlength',
     label: '最大输入长度',
     tag: 'ElInput',
-    inAttrs: true,
   },
+];
+
+/** select */
+export const FormItemAttrSelect: FormItemType[] = [
+  ...FormItemAttrBase,
   {
     name: 'options',
     label: '选项',
     tag: 'EditOptions',
-    inAttrs: true,
   },
 ];
 
-/** input */
-export const FormItemAttrInput: FormItemType[] = [...FormItemAttrBase];
-
-/** select */
-export const FormItemAttrSelect: FormItemType[] = [
-  ...FormItemAttrBase.filter((e) => !['maxlength'].includes(e.name)),
-];
-
 /** textarea */
-export const FormItemAttrTextarea: FormItemType[] = [...FormItemAttrBase];
+export const FormItemAttrTextarea: FormItemType[] = [
+  ...FormItemAttrBase,
+  {
+    name: 'maxlength',
+    label: '最大输入长度',
+    tag: 'ElInput',
+  },
+  {
+    name: 'show-word-limit',
+    label: '是否显示字数',
+    tag: 'ElSwitch',
+    filter: (val) => !!val.maxlength,
+  },
+];
 
 /** attrs 里的表单数据 公共版 */
 export const FormValueCommon = {
@@ -76,6 +100,7 @@ export const FormValueCommonObj: { [key: string]: any } = {
   textarea: {
     ...FormValueCommon,
     maxlength: '',
+    'show-word-limit': false,
     width: '100%',
   },
 };

@@ -1,11 +1,13 @@
 <template>
   <div class="Dom-Drag flex-all column">
     <div class="flex-1 overflow-auto flex">
+      <!-- options -->
       <div class="options scroll_thin">
         <div v-for="item in options" :key="item" :id="item" class="option-item">
           {{ item }}
         </div>
       </div>
+      <!-- content -->
       <div class="content flex-1">
         <el-form
           ref="formRef"
@@ -46,6 +48,7 @@
           </div>
         </el-form>
       </div>
+      <!-- attrs -->
       <div class="attrs scroll_thin">
         <BaseForm
           v-bind="{ labelPosition: 'left' }"
@@ -67,7 +70,7 @@ import BaseForm from '@/components/form/baseForm.vue';
 import BaseFormItem from '@/baseComponents/BaseFormItem.vue';
 import { isEmpty } from '@/common/utils/common';
 import { FormItemType, ItemObj } from '@/pages/fun/DomDrag/type';
-import { optionData } from '@/pages/fun/DomDrag/baseAttrs';
+import { optionData, outAttrs } from '@/pages/fun/DomDrag/baseAttrs';
 import {
   FormItemAttrObj,
   FormValueObj,
@@ -138,9 +141,9 @@ const removeFn = (item: ItemObj) => {
 const formList = ref(<FormItemType[]>[]);
 // attrs数据 contents的每一项的formValue的数据 结构为：{id1: {}, id2: {},...}
 const formValue = ref(<any>{});
-// 选中进行完善的formItem的 id
+// content 选中进行完善的formItem的 attrs 的 id
 const formItemSelectedId = ref(<string>'');
-// 选中进行完善的formItem的 formValue
+// content 选中进行完善的formItem的 attrs 的 formValue
 const formItemSelectedValue = ref(<any>{});
 
 // 点击某项
@@ -153,7 +156,7 @@ const formItemClick = (item: ItemObj) => {
   const keys = formList.value?.map((f) => f.name);
   // 循环keys，给选中的contents的item的 attrs部分 将已有随机值给对应的属性表单. eg.label
   keys.forEach((key, i) => {
-    const inAttrs = formList.value[i]?.inAttrs;
+    const inAttrs = !outAttrs.includes(key);
     if (inAttrs) {
       formValue.value[formItemSelectedId.value][key] =
         item.attrs[key as keyof ItemObj];
@@ -170,28 +173,50 @@ const formItemClick = (item: ItemObj) => {
 watch(
   () => formItemSelectedValue.value,
   () => {
+    // 将值同步给 formValue.value 中对应的那个obj
     formValue.value[formItemSelectedId.value] = cloneDeep(
       formItemSelectedValue.value
     );
+
+    // contents 中选中的item
     const sItem: ItemObj | undefined = contents.value.find(
       (item) => item.id === formItemSelectedId.value
     );
     if (!sItem) return;
+
+    formList.value = FormItemAttrObj[sItem.type].filter(
+      (fItem: FormItemType) => {
+        // 根据各项自身的 filter 判断其是否展示
+        if (fItem.filter) {
+          const res = fItem.filter(formItemSelectedValue.value);
+          return res;
+        }
+        return true;
+      }
+    );
+
     // 获取attrs的表单的key值数组
     const keys = Object.keys(formValue.value[formItemSelectedId.value]);
     // 循环keys，选中的contents的item 将attrs的数据 --> contents部分
     keys.forEach((key) => {
+      // 属性为空
       if (isEmpty(formValue.value[formItemSelectedId.value]?.[key])) return;
       // 判断是否是在attrs里面
-      const inAttrs = formList.value.find((f) => f.name === key)?.inAttrs;
+      const inAttrs = !outAttrs.includes(key);
+      // 是否隐藏 formList 是否还存在此项
+      const isShow = !!formList.value.find((f) => f.name === key);
+
+      // 属性是否在attrs里面
       if (inAttrs) {
         // 是 给到对应的formItem的attrs
-        sItem.attrs[key as keyof ItemObj] =
-          formValue.value[formItemSelectedId.value]?.[key];
+        sItem.attrs[key as keyof ItemObj] = isShow
+          ? formValue.value[formItemSelectedId.value]?.[key]
+          : FormValueObj[sItem.type]?.[key];
       } else {
         // 否 给到对应的formItem
-        sItem[key as keyof ItemObj] =
-          formValue.value[formItemSelectedId.value]?.[key];
+        sItem[key as keyof ItemObj] = isShow
+          ? formValue.value[formItemSelectedId.value]?.[key]
+          : FormValueObj[sItem.type]?.[key];
       }
     });
   },

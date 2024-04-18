@@ -6,7 +6,7 @@ import {
   FormValueCommonObj,
 } from '@/pages/fun/DomDrag/baseAttrs';
 
-/** 表单每项的基础属性 */
+/** contents 表单每项的基础属性 */
 export const ItemAttrObj: {
   [key: string]: Partial<Omit<ItemObj, 'tag'>> & { tag: string };
 } = {
@@ -33,10 +33,12 @@ export const ItemAttrObj: {
   },
 };
 
+/** attrs 里的表单属性 */
 export const FormItemAttrObj: { [key: string]: FormItemType[] } = {
   input: FormItemAttrInput,
   select: FormItemAttrSelect,
   textarea: FormItemAttrTextarea,
 };
 
+/** attrs 里的表单数据 */
 export const FormValueObj: { [key: string]: any } = FormValueCommonObj;
