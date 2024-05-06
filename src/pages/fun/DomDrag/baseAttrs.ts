@@ -1,12 +1,21 @@
 import { FormItemType } from '@/pages/fun/DomDrag/type';
+/**
+ * 新增加可选组件的步骤
+ * 1. optionData 增加 options 展示内容，eg.AAA;
+ * 2. 去 baseData文件 的 ItemAttrObj 增加对应的 contents 里的 基础属性;
+ * 3. 增加 FormItemAttr[AAA] ，其是 attrs 里面展示的内容;
+ *    然后去 baseData文件 的 FormItemAttrObj 添加相关映射 {[AAA]: FormItemAttr[AAA]};
+ * 4. FormValueCommonObj 增加 对应的 attrs 里的表单数据;
+ *    {[AAA]: { ...FormValueCommon, [其他默认属性值] }};
+ */
 
-/** options 内容：左侧可使用组件 */
-export const optionData: string[] = ['input', 'select', 'textarea'];
+/** options 内容：左侧可使用组件 或者说是 标签类型-tagType */
+export const optionData: string[] = ['input', 'select', 'textarea', 'date'];
 
 /** 不在attrs的属性 */
 export const outAttrs: string[] = [
   'id',
-  'type',
+  'tagType',
   'tag',
   'name',
   'label',
@@ -80,6 +89,45 @@ export const FormItemAttrTextarea: FormItemType[] = [
   },
 ];
 
+/** date */
+export const FormItemAttrDate: FormItemType[] = [
+  ...FormItemAttrBase,
+  {
+    name: 'type',
+    label: '显示类型',
+    tag: 'VSelect',
+    attrs: {
+      options: [
+        {
+          label: '日期',
+          value: 'date',
+        },
+        {
+          label: '日期区间',
+          value: 'daterange',
+        },
+        {
+          label: '日期时间',
+          value: 'datetime',
+        },
+        {
+          label: '日期时间区间',
+          value: 'datetimerange',
+        },
+        {
+          label: '周',
+          value: 'week',
+        },
+        {
+          label: '多个日期',
+          value: 'dates',
+        },
+      ]
+    }
+  }
+];
+
+
 /** attrs 里的表单数据 公共版 */
 export const FormValueCommon = {
   label: '',
@@ -103,4 +151,8 @@ export const FormValueCommonObj: { [key: string]: any } = {
     'show-word-limit': false,
     width: '100%',
   },
+  date: {
+    ...FormValueCommon,
+    type: 'datetime'
+  }
 };

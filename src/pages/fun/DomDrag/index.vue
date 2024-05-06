@@ -21,7 +21,7 @@
             class="content-item"
             :class="[
               formItemSelectedId === item.id ? 'active' : '',
-              `item-${item.type}`,
+              `item-${item.tagType}`,
             ]"
             :style="`width: ${item.width || 'calc(50% - 5px)'}`"
             @click.self="() => formItemClick(item)"
@@ -119,7 +119,7 @@ const initSortable = () => {
         // ItemAttrObj 是公用的，不深拷贝会影响同类型的其他item的引用对象 eg.attrs.options
         ...cloneDeep(ItemAttrObj[selectedItem.value]),
         id: id,
-        type: selectedItem.value,
+        tagType: selectedItem.value,
         name: `${selectedItem.value}${id}`,
         label: `${selectedItem.value}${id}`,
       });
@@ -151,9 +151,11 @@ const formItemClick = (item: ItemObj) => {
   // 记录选中的contents的item的id
   formItemSelectedId.value = item.id;
   // 给选中的contents的item的 attrs部分 对应的属性表单
-  formList.value = FormItemAttrObj[item.type];
+  formList.value = FormItemAttrObj[item.tagType];
   // 获取attrs的表单的key值数组
   const keys = formList.value?.map((f) => f.name);
+  // console.log('keys :>> ', keys);
+  // console.log('item :>> ', item);
   // 循环keys，给选中的contents的item的 attrs部分 将已有随机值给对应的属性表单. eg.label
   keys.forEach((key, i) => {
     const inAttrs = !outAttrs.includes(key);
@@ -167,12 +169,21 @@ const formItemClick = (item: ItemObj) => {
   });
 
   formItemSelectedValue.value = formValue.value[formItemSelectedId.value] || {};
+  // console.log('object :>> ', formItemSelectedValue.value);
 };
 
 // 监听 attrs 部分的form的值的变动，同步修改contents的属性
 watch(
   () => formItemSelectedValue.value,
   () => {
+    // console.log(
+    //   'value :>> ',
+    //   valObj.value[`${selectedItem.value}${formItemSelectedId.value}`]
+    // );
+    // attrs 部分属性变动，为消除 contents 中已有值得影响，将其进行清除
+    valObj.value[`${selectedItem.value}${formItemSelectedId.value}`] =
+      undefined;
+
     // 将值同步给 formValue.value 中对应的那个obj
     formValue.value[formItemSelectedId.value] = cloneDeep(
       formItemSelectedValue.value
@@ -184,7 +195,7 @@ watch(
     );
     if (!sItem) return;
 
-    formList.value = FormItemAttrObj[sItem.type].filter(
+    formList.value = FormItemAttrObj[sItem.tagType].filter(
       (fItem: FormItemType) => {
         // 根据各项自身的 filter 判断其是否展示
         if (fItem.filter) {
@@ -211,12 +222,12 @@ watch(
         // 是 给到对应的formItem的attrs
         sItem.attrs[key as keyof ItemObj] = isShow
           ? formValue.value[formItemSelectedId.value]?.[key]
-          : FormValueObj[sItem.type]?.[key];
+          : FormValueObj[sItem.tagType]?.[key];
       } else {
         // 否 给到对应的formItem
         sItem[key as keyof ItemObj] = isShow
           ? formValue.value[formItemSelectedId.value]?.[key]
-          : FormValueObj[sItem.type]?.[key];
+          : FormValueObj[sItem.tagType]?.[key];
       }
     });
   },
@@ -327,6 +338,9 @@ const valChange = (val: any, name: string) => {
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
+      }
+      .el-input {
+        flex: 1;
       }
       .el-select {
         width: 100%;

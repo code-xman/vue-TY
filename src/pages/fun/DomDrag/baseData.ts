@@ -3,6 +3,7 @@ import {
   FormItemAttrInput,
   FormItemAttrSelect,
   FormItemAttrTextarea,
+  FormItemAttrDate,
   FormValueCommonObj,
 } from '@/pages/fun/DomDrag/baseAttrs';
 
@@ -31,6 +32,13 @@ export const ItemAttrObj: {
       },
     },
   },
+  date: {
+    tag: 'ElDatePicker',
+    attrs: {
+      type: 'date',
+      editable: false,
+    }
+  }
 };
 
 /** attrs 里的表单属性 */
@@ -38,6 +46,7 @@ export const FormItemAttrObj: { [key: string]: FormItemType[] } = {
   input: FormItemAttrInput,
   select: FormItemAttrSelect,
   textarea: FormItemAttrTextarea,
+  date: FormItemAttrDate,
 };
 
 /** attrs 里的表单数据 */
