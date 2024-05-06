@@ -120,6 +120,24 @@ const formList: FormItem[] = [
     },
   },
   {
+    name: 'sex',
+    label: '性别',
+    tag: 'VRadio',
+    required: true,
+    attrs: {
+      options: [
+        {
+          label: '男',
+          value: 'man',
+        },
+        {
+          label: '女',
+          value: 'woman',
+        },
+      ],
+    },
+  },
+  {
     name: 'birth',
     label: '出生日期',
     tag: 'ElDatePicker',

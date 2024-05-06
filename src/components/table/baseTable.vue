@@ -1,5 +1,5 @@
 <!--
- * @Description: 公共基础表单
+ * @Description: 公共基础表格
  * @Author: xiangjie
  * @Date: 2023-01-11 16:55:55
  * @LastEditors: xiangjie
