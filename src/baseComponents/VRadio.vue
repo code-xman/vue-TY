@@ -1,14 +1,16 @@
 <template>
   <el-radio-group class="v-radio" placeholder="请选择" v-bind="$attrs">
-    <el-radio
+    <template
       v-for="option in (props.options as LabelValue[])"
       :key="option.value"
-      :label="option.value"
     >
-      {{ option.label }}
-    </el-radio>
+      <component :is="tag" :label="option.value" :border="type === 'border'">
+        {{ option.label }}
+      </component>
+    </template>
   </el-radio-group>
 </template>
+
 <script lang="ts">
 // 声明额外的选项
 export default {
@@ -19,15 +21,41 @@ export default {
 </script>
 
 <script setup lang="ts">
+import { markRaw, shallowRef, watch } from 'vue';
+import { ElRadio, ElRadioButton } from 'element-plus';
 import { LabelValue } from '@/type/common';
 
 const props = defineProps({
+  type: {
+    type: String,
+    default: 'default',
+  },
   options: {
     type: Array,
     default: () => [] as LabelValue[],
   },
 });
 
+const tag = shallowRef(<any>ElRadio);
+
+watch(
+  () => props.type,
+  () => {
+    switch (props.type) {
+      case 'button':
+        tag.value = ElRadioButton;
+        break;
+
+      case 'border':
+        tag.value = ElRadio;
+        break;
+
+      default:
+        tag.value = ElRadio;
+        break;
+    }
+  }
+);
 </script>
 
 <style lang="less" scoped>

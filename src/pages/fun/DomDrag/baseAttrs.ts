@@ -10,7 +10,13 @@ import { FormItemType } from '@/pages/fun/DomDrag/type';
  */
 
 /** options 内容：左侧可使用组件 或者说是 标签类型-tagType */
-export const optionData: string[] = ['input', 'select', 'textarea', 'date'];
+export const optionData: string[] = [
+  'input',
+  'select',
+  'textarea',
+  'date',
+  'radio',
+];
 
 /** 不在attrs的属性 */
 export const outAttrs: string[] = [
@@ -122,11 +128,41 @@ export const FormItemAttrDate: FormItemType[] = [
           label: '多个日期',
           value: 'dates',
         },
-      ]
-    }
-  }
+      ],
+    },
+  },
 ];
 
+/** radio */
+export const FormItemAttrRadio: FormItemType[] = [
+  ...FormItemAttrBase,
+  {
+    name: 'options',
+    label: '选项',
+    tag: 'EditOptions',
+  },
+  {
+    name: 'type',
+    label: '显示类型',
+    tag: 'VSelect',
+    attrs: {
+      options: [
+        {
+          label: '默认',
+          value: 'default',
+        },
+        {
+          label: '边框',
+          value: 'border',
+        },
+        {
+          label: '按钮',
+          value: 'button',
+        },
+      ],
+    },
+  },
+];
 
 /** attrs 里的表单数据 公共版 */
 export const FormValueCommon = {
@@ -153,6 +189,11 @@ export const FormValueCommonObj: { [key: string]: any } = {
   },
   date: {
     ...FormValueCommon,
-    type: 'datetime'
-  }
+    type: 'datetime',
+  },
+  radio: {
+    ...FormValueCommon,
+    type: 'default',
+    options: [],
+  },
 };

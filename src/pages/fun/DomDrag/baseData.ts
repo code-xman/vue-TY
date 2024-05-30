@@ -4,6 +4,7 @@ import {
   FormItemAttrSelect,
   FormItemAttrTextarea,
   FormItemAttrDate,
+  FormItemAttrRadio,
   FormValueCommonObj,
 } from '@/pages/fun/DomDrag/baseAttrs';
 
@@ -38,6 +39,13 @@ export const ItemAttrObj: {
       type: 'date',
       editable: false,
     }
+  },
+  radio: {
+    tag: 'VRadio',
+    attrs: {
+      type: 'default',
+      options: [],
+    },
   }
 };
 
@@ -47,6 +55,7 @@ export const FormItemAttrObj: { [key: string]: FormItemType[] } = {
   select: FormItemAttrSelect,
   textarea: FormItemAttrTextarea,
   date: FormItemAttrDate,
+  radio: FormItemAttrRadio,
 };
 
 /** attrs 里的表单数据 */
