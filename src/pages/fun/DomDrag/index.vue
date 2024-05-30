@@ -3,8 +3,13 @@
     <div class="flex-1 overflow-auto flex">
       <!-- options -->
       <div class="options scroll_thin">
-        <div v-for="item in options" :key="item" :id="item" class="option-item">
-          {{ item }}
+        <div
+          v-for="item in options"
+          :key="(item.value as string)"
+          :id="(item.value as string)"
+          class="option-item"
+        >
+          {{ item.label }}
         </div>
       </div>
       <!-- content -->
@@ -68,6 +73,7 @@ import { cloneDeep } from 'lodash';
 
 import BaseForm from '@/components/form/baseForm.vue';
 import BaseFormItem from '@/baseComponents/BaseFormItem.vue';
+import { LabelValue } from '@/type/common';
 import { isEmpty } from '@/common/utils/common';
 import { FormItemType, ItemObj } from '@/pages/fun/DomDrag/type';
 import { optionData, outAttrs } from '@/pages/fun/DomDrag/baseAttrs';
@@ -77,15 +83,15 @@ import {
   ItemAttrObj,
 } from '@/pages/fun/DomDrag/baseData';
 
-const options = ref(<string[]>[...optionData]);
+const options = ref(<LabelValue[]>[...optionData]);
 const contents = ref(<ItemObj[]>[]);
 const selectedItem = ref(<string>'');
 
 // 拖拽相关逻辑
 const initSortable = () => {
   // 左
-  const options = document.querySelector('.options');
-  new Sortable.create(options, {
+  const optionsRef = document.querySelector('.options');
+  new Sortable.create(optionsRef, {
     group: {
       name: 'options',
       pull: 'clone', // 列表单元移出，移动的为该元素的副本；
@@ -96,7 +102,7 @@ const initSortable = () => {
     sort: false, // 设为false，禁止sort
     onChoose: (evt: any) => {
       // console.log('evt :>> ', evt);
-      selectedItem.value = evt.item.innerText;
+      selectedItem.value = evt.item.id;
     },
     // 结束拖拽
     onEnd: function (/**Event*/ evt: any) {

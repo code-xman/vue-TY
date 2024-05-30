@@ -1,3 +1,4 @@
+import { LabelValue } from '@/type/common';
 import { FormItemType } from '@/pages/fun/DomDrag/type';
 /**
  * 新增加可选组件的步骤
@@ -10,12 +11,27 @@ import { FormItemType } from '@/pages/fun/DomDrag/type';
  */
 
 /** options 内容：左侧可使用组件 或者说是 标签类型-tagType */
-export const optionData: string[] = [
-  'input',
-  'select',
-  'textarea',
-  'date',
-  'radio',
+export const optionData: LabelValue[] = [
+  {
+    label: '输入框',
+    value: 'input',
+  },
+  {
+    label: '选择器',
+    value: 'select',
+  },
+  {
+    label: '文本框',
+    value: 'textarea',
+  },
+  {
+    label: '日期',
+    value: 'date',
+  },
+  {
+    label: '单选框',
+    value: 'radio',
+  },
 ];
 
 /** 不在attrs的属性 */
