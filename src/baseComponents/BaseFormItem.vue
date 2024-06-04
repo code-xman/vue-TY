@@ -1,9 +1,17 @@
 <script lang="tsx">
-import { h, defineComponent, provide, ref, toRefs, PropType } from 'vue';
-import { ElInput, ElSelect, ElDatePicker, ElInputNumber, ElSwitch, } from 'element-plus';
+import { Attrs } from '@/components/form/type';
+import { h, defineComponent, provide, ref, toRefs, PropType, watch } from 'vue';
+import {
+  ElInput,
+  ElSelect,
+  ElDatePicker,
+  ElInputNumber,
+  ElSwitch,
+} from 'element-plus';
 import VInput from '@/baseComponents/VInput.vue';
 import VSelect from '@/baseComponents/VSelect.vue';
 import VRadio from '@/baseComponents/VRadio.vue';
+import VCheckbox from '@/baseComponents/VCheckbox.vue';
 import EditOptions from '@/components/EditOptions/index.vue';
 
 interface EleType {
@@ -20,6 +28,7 @@ const ele: EleType = {
   VInput,
   VSelect,
   VRadio,
+  VCheckbox,
   EditOptions,
 };
 
@@ -38,11 +47,19 @@ export default defineComponent({
   props: {
     tag: [Object, String] as PropType<any>,
     bind: {
-      type: Object,
+      type: Object as PropType<Attrs>,
       default: () => ({}),
     },
     on: Object,
-    model: [String, Number, Array, Object, Boolean, null, undefined] as PropType<any>,
+    model: [
+      String,
+      Number,
+      Array,
+      Object,
+      Boolean,
+      null,
+      undefined,
+    ] as PropType<any>,
     children: {
       type: Object,
       default: () => ({}),
@@ -64,6 +81,7 @@ export default defineComponent({
       });
     }
 
+    // modelValue 与 'onUpdate:modelValue' 是一对属性，处理双向绑定数据，等同于 v-model
     return () =>
       h(
         tagName,
@@ -72,7 +90,21 @@ export default defineComponent({
           ...eventsObj,
           modelValue: props.model,
           'onUpdate:modelValue': (val: any) => {
+            if (props.bind.changeValueType) return;
             context.emit('valChange', val);
+          },
+          onBlur: (e: any) => {
+            if (props.bind.changeValueType === 'blur') {
+              switch (props.tag) {
+                case 'ElInputNumber':
+                  context.emit('valChange', e.target.valueAsNumber);
+                  break;
+
+                default:
+                  context.emit('valChange', e.target.value);
+                  break;
+              }
+            }
           },
         },
         slots

@@ -1,7 +1,10 @@
-import { FormItem } from '@/components/form/type';
+import { FormItem, Attrs, } from '@/components/form/type';
 
 export type FormItemType = FormItem & {
+  /** 是否显示此项 */
   filter?: (val?:any) => boolean;
+  /** 修改此项后的联动变化 */
+  linkage?: (val?:any) => any;
 };
 
 /** 表单每项的属性类型 */

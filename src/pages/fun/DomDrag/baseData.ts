@@ -1,10 +1,12 @@
-import { FormItemType, ItemObj, } from '@/pages/fun/DomDrag/type';
+import { FormItemType, ItemObj } from '@/pages/fun/DomDrag/type';
 import {
   FormItemAttrInput,
+  FormItemAttrInputNumber,
   FormItemAttrSelect,
   FormItemAttrTextarea,
   FormItemAttrDate,
   FormItemAttrRadio,
+  FormItemAttrCheckbox,
   FormValueCommonObj,
 } from '@/pages/fun/DomDrag/baseAttrs';
 
@@ -14,6 +16,14 @@ export const ItemAttrObj: {
 } = {
   input: {
     tag: 'ElInput',
+  },
+  inputNumber: {
+    tag: 'ElInputNumber',
+    attrs: {
+      step: 1,
+      precision: 2,
+      controls: true,
+    },
   },
   select: {
     tag: 'VSelect',
@@ -38,7 +48,7 @@ export const ItemAttrObj: {
     attrs: {
       type: 'date',
       editable: false,
-    }
+    },
   },
   radio: {
     tag: 'VRadio',
@@ -46,16 +56,25 @@ export const ItemAttrObj: {
       type: 'default',
       options: [],
     },
-  }
+  },
+  checkbox: {
+    tag: 'VCheckbox',
+    attrs: {
+      type: 'default',
+      options: [],
+    },
+  },
 };
 
 /** attrs 里的表单属性 */
 export const FormItemAttrObj: { [key: string]: FormItemType[] } = {
   input: FormItemAttrInput,
+  inputNumber: FormItemAttrInputNumber,
   select: FormItemAttrSelect,
   textarea: FormItemAttrTextarea,
   date: FormItemAttrDate,
   radio: FormItemAttrRadio,
+  checkbox: FormItemAttrCheckbox,
 };
 
 /** attrs 里的表单数据 */

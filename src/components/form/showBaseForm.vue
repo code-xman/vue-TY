@@ -73,7 +73,7 @@ const formList:FormItem[] = [
     label: '测试失焦',
     tag: 'ElInput',
     events: {
-      blur: (event: any) => {
+      Blur: (event: any) => {
         console.log('event.target.value :>> ', event.target.value);
       },
     },

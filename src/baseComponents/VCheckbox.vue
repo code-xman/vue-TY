@@ -1,5 +1,9 @@
 <template>
-  <el-radio-group class="v-radio" placeholder="请选择" v-bind="$attrs">
+  <el-checkbox-group
+    class="v-checkbox flex flex-wrap"
+    placeholder="请选择"
+    v-bind="$attrs"
+  >
     <template
       v-for="option in (props.options as LabelValue[])"
       :key="option.value"
@@ -8,22 +12,19 @@
         {{ option.label }}
       </component>
     </template>
-  </el-radio-group>
+  </el-checkbox-group>
 </template>
 
-<script lang="ts">
-// 声明额外的选项
-export default {
-  name: 'v-radio',
+<script setup lang="ts">
+import { shallowRef, watch } from 'vue';
+import { ElCheckbox, ElCheckboxButton } from 'element-plus';
+import { LabelValue } from '@/type/common';
+
+defineOptions({
+  name: 'v-checkbox',
   // inheritAttrs: false 传入数据不会覆盖本组件原有的属性，并获取到父组件传入的同名属性
   inheritAttrs: false,
-};
-</script>
-
-<script setup lang="ts">
-import { markRaw, shallowRef, watch } from 'vue';
-import { ElRadio, ElRadioButton } from 'element-plus';
-import { LabelValue } from '@/type/common';
+});
 
 const props = defineProps({
   type: {
@@ -36,22 +37,22 @@ const props = defineProps({
   },
 });
 
-const tag = shallowRef(<any>ElRadio);
+const tag = shallowRef(<any>ElCheckbox);
 
 watch(
   () => props.type,
   () => {
     switch (props.type) {
       case 'button':
-        tag.value = ElRadioButton;
+        tag.value = ElCheckboxButton;
         break;
 
       case 'border':
-        tag.value = ElRadio;
+        tag.value = ElCheckbox;
         break;
 
       default:
-        tag.value = ElRadio;
+        tag.value = ElCheckbox;
         break;
     }
   }
@@ -59,10 +60,10 @@ watch(
 </script>
 
 <style lang="less" scoped>
-.v-radio {
+.v-checkbox {
   width: 100%;
   // 上下加一点margin，否则border模式换行后会粘在一起
-  .el-radio.is-bordered {
+  .el-checkbox.is-bordered {
     margin-top: 2px;
     margin-bottom: 2px;
   }

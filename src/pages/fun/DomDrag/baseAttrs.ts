@@ -17,6 +17,10 @@ export const optionData: LabelValue[] = [
     value: 'input',
   },
   {
+    label: '数字框',
+    value: 'inputNumber',
+  },
+  {
     label: '选择器',
     value: 'select',
   },
@@ -32,7 +36,24 @@ export const optionData: LabelValue[] = [
     label: '单选框',
     value: 'radio',
   },
+  {
+    label: '多选框',
+    value: 'checkbox',
+  },
 ];
+
+/** 选择组件后 contents 中的默认值 */
+export const defaultValueObj: {
+  [key: string]: undefined | string | string[];
+} = {
+  input: '',
+  inputNumber: undefined,
+  select: '',
+  textarea: '',
+  date: '',
+  radio: '',
+  checkbox: [],
+};
 
 /** 不在attrs的属性 */
 export const outAttrs: string[] = [
@@ -82,6 +103,81 @@ export const FormItemAttrInput: FormItemType[] = [
     name: 'maxlength',
     label: '最大输入长度',
     tag: 'ElInput',
+  },
+];
+
+/** inputNumber */
+export const FormItemAttrInputNumber: FormItemType[] = [
+  ...FormItemAttrBase,
+  {
+    name: 'max',
+    label: '最大值',
+    tag: 'ElInputNumber',
+    attrs: {
+      controls: false,
+      changeValueType: 'blur',
+    },
+    linkage: (form) => {
+      if (isNaN(form.min) || isNaN(form.max))
+        return { key: 'max', val: form.max };
+      if (form.max < form.min) return { key: 'min', val: undefined };
+      return { key: 'max', val: form.max };
+    },
+  },
+  {
+    name: 'min',
+    label: '最小值',
+    tag: 'ElInputNumber',
+    attrs: {
+      controls: false,
+      changeValueType: 'blur',
+    },
+    linkage: (form) => {
+      if (isNaN(form.min) || isNaN(form.max))
+        return { key: 'min', val: form.min };
+      if (form.max < form.min) return { key: 'max', val: undefined };
+      return { key: 'min', val: form.min };
+    },
+  },
+  {
+    name: 'step',
+    label: '步长',
+    tag: 'ElInputNumber',
+    attrs: {
+      controls: false,
+      min: 0.001,
+    },
+  },
+  {
+    name: 'precision',
+    label: '精度',
+    tag: 'ElInputNumber',
+    attrs: {
+      controls: false,
+    },
+  },
+  {
+    name: 'controls',
+    label: '使用控制按钮',
+    tag: 'ElSwitch',
+  },
+  {
+    name: 'controls-position',
+    label: '按钮位置',
+    tag: 'VSelect',
+    attrs: {
+      options: [
+        {
+          label: '默认',
+          value: '',
+        },
+        {
+          label: '右侧',
+          value: 'right',
+        },
+      ],
+    },
+    filter: (form) => !!form.controls,
   },
 ];
 
@@ -180,6 +276,37 @@ export const FormItemAttrRadio: FormItemType[] = [
   },
 ];
 
+/** checkbox */
+export const FormItemAttrCheckbox: FormItemType[] = [
+  ...FormItemAttrBase,
+  {
+    name: 'options',
+    label: '选项',
+    tag: 'EditOptions',
+  },
+  {
+    name: 'type',
+    label: '显示类型',
+    tag: 'VSelect',
+    attrs: {
+      options: [
+        {
+          label: '默认',
+          value: 'default',
+        },
+        {
+          label: '边框',
+          value: 'border',
+        },
+        {
+          label: '按钮',
+          value: 'button',
+        },
+      ],
+    },
+  },
+];
+
 /** attrs 里的表单数据 公共版 */
 export const FormValueCommon = {
   label: '',
@@ -192,6 +319,15 @@ export const FormValueCommonObj: { [key: string]: any } = {
   input: {
     ...FormValueCommon,
     maxlength: '',
+  },
+  inputNumber: {
+    ...FormValueCommon,
+    // min: undefined,
+    // max: undefined,
+    step: 1,
+    precision: 2,
+    controls: true,
+    'controls-position': '',
   },
   select: {
     ...FormValueCommon,
@@ -208,6 +344,11 @@ export const FormValueCommonObj: { [key: string]: any } = {
     type: 'datetime',
   },
   radio: {
+    ...FormValueCommon,
+    type: 'default',
+    options: [],
+  },
+  checkbox: {
     ...FormValueCommon,
     type: 'default',
     options: [],

@@ -7,6 +7,7 @@
           v-for="item in options"
           :key="(item.value as string)"
           :id="(item.value as string)"
+          :data-id="item.value"
           class="option-item"
         >
           {{ item.label }}
@@ -66,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, nextTick } from 'vue';
 import { CloseBold } from '@element-plus/icons-vue';
 import Sortable from 'sortablejs';
 import { cloneDeep } from 'lodash';
@@ -74,9 +75,14 @@ import { cloneDeep } from 'lodash';
 import BaseForm from '@/components/form/baseForm.vue';
 import BaseFormItem from '@/baseComponents/BaseFormItem.vue';
 import { LabelValue } from '@/type/common';
+import { Attrs } from '@/components/form/type';
 import { isEmpty } from '@/common/utils/common';
 import { FormItemType, ItemObj } from '@/pages/fun/DomDrag/type';
-import { optionData, outAttrs } from '@/pages/fun/DomDrag/baseAttrs';
+import {
+  optionData,
+  defaultValueObj,
+  outAttrs,
+} from '@/pages/fun/DomDrag/baseAttrs';
 import {
   FormItemAttrObj,
   FormValueObj,
@@ -102,7 +108,8 @@ const initSortable = () => {
     sort: false, // 设为false，禁止sort
     onChoose: (evt: any) => {
       // console.log('evt :>> ', evt);
-      selectedItem.value = evt.item.id;
+      // 改为使用 dataset, 其会获取data-*里设置的属性值；不用id是因为使用后id会被移除(不知道为啥)；
+      selectedItem.value = evt.item.dataset.id;
     },
     // 结束拖拽
     onEnd: function (/**Event*/ evt: any) {
@@ -130,7 +137,8 @@ const initSortable = () => {
         label: `${selectedItem.value}${id}`,
       });
 
-      valObj.value[`${selectedItem.value}${id}`] = '';
+      valObj.value[`${selectedItem.value}${id}`] =
+        defaultValueObj[selectedItem.value];
 
       // 给选中的contents的item的 attrs部分 对应的属性表单赋默认值
       formValue.value[id] = cloneDeep(FormValueObj[selectedItem.value]);
@@ -141,6 +149,8 @@ const initSortable = () => {
 // 移除某项
 const removeFn = (item: ItemObj) => {
   contents.value = contents.value.filter((ci) => ci.id !== item.id);
+  formList.value = [];
+  delete formValue.value[formItemSelectedId.value];
 };
 
 // attrs各项
@@ -166,8 +176,9 @@ const formItemClick = (item: ItemObj) => {
   keys.forEach((key, i) => {
     const inAttrs = !outAttrs.includes(key);
     if (inAttrs) {
-      formValue.value[formItemSelectedId.value][key] =
-        item.attrs[key as keyof ItemObj];
+      formValue.value[formItemSelectedId.value][key] = (item.attrs as Attrs)[
+        key as keyof Attrs
+      ];
     } else {
       formValue.value[formItemSelectedId.value][key] =
         item[key as keyof ItemObj];
@@ -181,7 +192,7 @@ const formItemClick = (item: ItemObj) => {
 // 监听 attrs 部分的form的值的变动，同步修改contents的属性
 watch(
   () => formItemSelectedValue.value,
-  () => {
+  async (val, oldVal) => {
     // console.log(
     //   'value :>> ',
     //   valObj.value[`${selectedItem.value}${formItemSelectedId.value}`]
@@ -190,7 +201,20 @@ watch(
     valObj.value[`${selectedItem.value}${formItemSelectedId.value}`] =
       undefined;
 
-    // 将值同步给 formValue.value 中对应的那个obj
+    // TODO: 此处理方案并不是很好。。。
+    // 处理attrs中需要联动的项
+    formList.value.forEach((fItem: FormItemType) => {
+      // 仅触发修改项的linkage
+      if (fItem.linkage && val[fItem.name] !== oldVal[fItem.name]) {
+        const { key, val } = fItem.linkage(formItemSelectedValue.value);
+        // 值不相等才赋值，避免循环赋值
+        if (val !== formItemSelectedValue.value[key]) {
+          formItemSelectedValue.value[key] = val;
+        }
+      }
+    });
+
+    // 将值同步给 formValue.value 中对应的那个obj，也就是选中的attrs的值
     formValue.value[formItemSelectedId.value] = cloneDeep(
       formItemSelectedValue.value
     );
@@ -216,8 +240,9 @@ watch(
     const keys = Object.keys(formValue.value[formItemSelectedId.value]);
     // 循环keys，选中的contents的item 将attrs的数据 --> contents部分
     keys.forEach((key) => {
-      // 属性为空
-      if (isEmpty(formValue.value[formItemSelectedId.value]?.[key])) return;
+      // 属性为空也需要赋值，attrs更改的值都需要传给contents (eg. InputNumber max/min 可以为空)
+      // if (isEmpty(formValue.value[formItemSelectedId.value]?.[key])) return;
+
       // 判断是否是在attrs里面
       const inAttrs = !outAttrs.includes(key);
       // 是否隐藏 formList 是否还存在此项
@@ -226,7 +251,7 @@ watch(
       // 属性是否在attrs里面
       if (inAttrs) {
         // 是 给到对应的formItem的attrs
-        sItem.attrs[key as keyof ItemObj] = isShow
+        sItem.attrs[key as keyof Attrs] = isShow
           ? formValue.value[formItemSelectedId.value]?.[key]
           : FormValueObj[sItem.tagType]?.[key];
       } else {
@@ -314,8 +339,8 @@ const valChange = (val: any, name: string) => {
         top: -8px;
         right: -8px;
 
-        width: 24px;
-        height: 24px;
+        width: 20px;
+        height: 20px;
         background: #f56c6c;
         border: 1px solid #f56c6c;
         border-radius: 50%;
@@ -323,7 +348,7 @@ const valChange = (val: any, name: string) => {
         cursor: pointer;
 
         .icon_remove {
-          font-size: 14px;
+          font-size: 12px;
           color: #fff;
           margin-left: -4px;
           margin-top: 8px;
@@ -348,6 +373,9 @@ const valChange = (val: any, name: string) => {
       .el-input {
         flex: 1;
       }
+
+      .el-input,
+      .el-input-number,
       .el-select {
         width: 100%;
       }
