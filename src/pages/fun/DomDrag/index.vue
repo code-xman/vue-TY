@@ -57,13 +57,26 @@
       <!-- attrs -->
       <div class="attrs scroll_thin">
         <BaseForm
-          v-bind="{ labelPosition: 'left' }"
+          v-bind="formAttr"
           :formList="formList"
           v-model:valueObj="formItemSelectedValue"
         ></BaseForm>
       </div>
     </div>
+    <div class="btns flex-0 flex x-end pt-10">
+      <el-button type="primary" @click="getFormData">获取数据</el-button>
+      <el-button type="success" @click="copyFormData">复制数据</el-button>
+      <el-button type="warning" @click="previewFormData">预览</el-button>
+    </div>
   </div>
+  <el-drawer v-model="previewShow" title="预览" size="90%">
+    <BaseForm
+      v-bind="formAttr"
+      :formList="previewFormList"
+      v-model:valueObj="previewForm"
+    >
+    </BaseForm>
+  </el-drawer>
 </template>
 
 <script setup lang="ts">
@@ -75,7 +88,7 @@ import { cloneDeep } from 'lodash';
 import BaseForm from '@/components/form/baseForm.vue';
 import BaseFormItem from '@/baseComponents/BaseFormItem.vue';
 import { LabelValue } from '@/type/common';
-import { Attrs } from '@/components/form/type';
+import { Attrs, FormItem } from '@/components/form/type';
 import { isEmpty } from '@/common/utils/common';
 import { FormItemType, ItemObj } from '@/pages/fun/DomDrag/type';
 import {
@@ -142,6 +155,21 @@ const initSortable = () => {
 
       // 给选中的contents的item的 attrs部分 对应的属性表单赋默认值
       formValue.value[id] = cloneDeep(FormValueObj[selectedItem.value]);
+    },
+    // 结束拖拽
+    onEnd: function (/**Event*/ evt: any) {
+      // 处理 contents 里元素位置更换；
+      // 深拷贝目标元素
+      const targetItem = cloneDeep(contents.value[evt.oldIndex]);
+      // 原目标元素添加 needDelete 标识
+      contents.value[evt.oldIndex].attrs = {
+        ...(contents.value[evt.oldIndex].attrs || {}),
+        needDelete: true,
+      };
+      // 添加新目标元素
+      contents.value.splice(evt.newIndex, 0, targetItem);
+      // 筛除原目标元素
+      contents.value = contents.value.filter((e) => !e.attrs?.needDelete);
     },
   });
 };
@@ -275,6 +303,29 @@ const valObj = ref(<any>{});
 
 const valChange = (val: any, name: string) => {
   valObj.value[name] = val;
+};
+
+const previewShow = ref(false);
+const formAttr = {
+  labelPosition: 'right',
+};
+
+const previewFormList = ref(<FormItem[]>[]);
+const previewForm = ref(<any>{});
+
+// 获取数据
+const getFormData = () => {
+  console.log('contents :>> ', contents.value);
+};
+
+// 复制数据
+const copyFormData = () => {};
+
+// 预览
+const previewFormData = () => {
+  previewForm.value = {};
+  previewFormList.value = contents.value;
+  previewShow.value = true;
 };
 </script>
 

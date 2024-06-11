@@ -73,13 +73,14 @@ const formRule = ref(<FormRules>{ ...props.rules });
 
 /** 为需要 required 的字段添加必填校验 */
 watch(
-  [() => props.formList, () => formRule],
+  [() => props.formList, () => props.rules],
   () => {
     /** required的字段 */
     const requiredItems = props.formList.filter(
       (item: FormItem) => item.required
     );
-    const keys = Object.keys(formRule.value);
+    const keys = Object.keys({ ...props.rules });
+    formRule.value = { ...props.rules };
     requiredItems.forEach((item: FormItem) => {
       /** 必填校验 */
       const requiredRule: FormItemRule = {
@@ -97,9 +98,10 @@ watch(
         formRule.value[item.name] = [requiredRule];
       }
     });
+    form.value?.clearValidate();
     // console.log('formRule.value :>> ', formRule.value);
   },
-  { immediate: true }
+  { immediate: true, deep: true }
 );
 
 /** props.valueObj变化，同步更新valObj */
@@ -107,6 +109,7 @@ watch(
   () => props.valueObj,
   () => {
     valObj.value = cloneDeep(props.valueObj);
+    form.value?.clearValidate();
   }
 );
 
@@ -131,7 +134,7 @@ const validate = () => {
       }
     });
   })
-    .then(res => res)
+    .then((res) => res)
     .catch((error: string | { [key: string]: FormItemError[] }) => {
       if (typeof error === 'string') {
         ElMessage.warning(error);
