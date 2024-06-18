@@ -23,7 +23,9 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-camera.position.z = 50;
+
+// camera.position.z = 50;
+camera.position.set(0, 3, 24);
 camera.lookAt(new THREE.Vector3());
 
 const renderer = new THREE.WebGLRenderer({
@@ -50,10 +52,13 @@ const vertex = /* GLSL */ `
     vUv = uv;
     
     // 颜色处理
-    vec3 color1 = vec3(227., 155., 0.); // 中心
+    vec3 color1 = vec3(227., 135., 0.); // 中心
     vec3 color2 = vec3(100., 50., 255.); // 两端
-    float d = abs(position.y / 10.0);
-    vColor = mix(color1, color2, d) / 255.;
+    // vec3(40., 10., 40.))对应的 xyz 是最远的xyz,没有任何一个点超过这个值;
+    // 这里就是看当前点距离这个最远xyz的百分比,越靠近中心就是color1,越靠近最远xyz就是color2
+    float d = length(abs(position) / vec3(40., 10., 40.));
+    d = clamp(d, 0., 1.); // clamp 截取到 0~1
+    vColor = mix(color1, color2, d) / 255.; // 混合后 除以255 保证值在 0~1 之间，为可用颜色值
 
     vec3 transformed = position;
 
@@ -90,11 +95,12 @@ const fragment = /* GLSL */ `
 `;
 
 const count1 = 20000; // 星球粒子数
-const count2 = 50000; // 星云粒子数
+const count2 = 30000; // sin带粒子数
+const count3 = 60000; // 星云粒子数
 const positions = [];
 const sizes = [];
 const shifts = [];
-for (let i = 0; i < count1 + count2; i++) {
+for (let i = 0; i < count1 + count2 + count3; i++) {
   // 随机粒子大小
   const size = Math.random() * 1.5 + 0.5; // 大小范围0.5-2.0
   sizes.push(size);
@@ -119,8 +125,28 @@ for (let i = 0; i < count1 + count2; i++) {
     // const y = Math.sin(x);
     // const z = Math.sin(x) * Math.sin(theta);
     positions.push(x, y, z);
+  } else if (i < count2) {
+    // 半径15的位置有一条sin函数带
+    const x = (Math.random() - 0.5) * 2 * 15; // x: -15~15
+    const y = Math.sin(x); // y: x对应的sin函数值
+    // 15^2 - x^2再开根号-保证是圆环；((i % 2) - 0.5) * 2-结果为 -1 | 1
+    const z =
+      Math.sqrt(225 - Math.min(Math.pow(x, 2) * 1.01, 225)) *
+      ((i % 2) - 0.5) *
+      2; // z: -15~15
+    positions.push(x, y, z);
   } else {
     // 圆盘/圆柱部分
+    const r = 18;
+    const R = 40;
+    const rand = Math.pow(Math.random(), 1.5);
+    const radius = Math.sqrt(R * R * rand + (1 - rand) * r * r);
+    const { x, y, z } = new THREE.Vector3().setFromCylindricalCoords(
+      radius, // 半径: r ~ R 的混合
+      Math.random() * 2 * Math.PI, // 角度:0~2PI
+      (Math.random() - 0.5) * 2 // 高度y:-1 ~ 1
+    );
+    positions.push(x, y, z);
   }
 }
 
@@ -145,6 +171,8 @@ const material = new THREE.ShaderMaterial({
   depthTest: false, // 避免粒子黑边的效果
 });
 const points = new THREE.Points(geometry, material);
+points.rotation.order = 'ZYX';
+points.rotation.z = 0.1;
 scene.add(points);
 
 // TIPS: 处理动画
@@ -155,9 +183,9 @@ function animate() {
   requestID.value = requestAnimationFrame(animate);
 
   const time = clock.getElapsedTime();
-  
+
   material.uniforms.uTime.value = time;
-  points.rotation.y = time * 0.1; // 自转设置-y轴、0.1倍time的速度
+  points.rotation.y = time * 0.02; // 自转设置-y轴、0.1倍time的速度
 
   renderer.render(scene, camera);
 }
