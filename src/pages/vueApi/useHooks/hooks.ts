@@ -1,9 +1,11 @@
-import { ref } from 'vue';
+import { ref, Ref } from 'vue';
 import { ElMessage } from 'element-plus';
 import { getValidateCode } from '@/api/common';
 
 // useState 类似于react的useState，定义一个变量和修改它的方法
-export const useState = (init: any) => {
+export const useState: (
+  init: any
+) => (Ref<any, any> | ((value: any) => void))[] = (init: any) => {
   const state = ref<any>(init);
   const setState = (value: any) => {
     state.value = value;
@@ -33,7 +35,7 @@ export const useCountDown = (downNum: number = 60) => {
         countdown();
       }
     }, 1000);
-  }
+  };
 
   // 发送方法
   const sendFn = async () => {
@@ -44,9 +46,9 @@ export const useCountDown = (downNum: number = 60) => {
       // 发送验证码接口
       const code = await getValidateCode();
       console.log('验证码 :>> ', code);
-      ElMessage.success('已发送验证码')
+      ElMessage.success('已发送验证码');
     } catch (error) {
-      ElMessage.error(`${error}`)
+      ElMessage.error(`${error}`);
       disabled.value = false;
     }
   };

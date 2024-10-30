@@ -30,7 +30,7 @@ const newA = ref('');
 const { sendBtnText, disabled, timer, sendFn } = useCountDown(10);
 
 const updated = () => {
-  setA(newA.value);
+  (setA as (value: any) => void)(newA.value);
 };
 
 onBeforeUnmount(() => {

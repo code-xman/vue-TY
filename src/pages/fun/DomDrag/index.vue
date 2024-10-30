@@ -43,7 +43,7 @@
                 :bind="item.attrs || {}"
                 :model="valObj[item.name]"
                 @click.stop
-                @valChange="(val) => valChange(val, item.name)"
+                @valChange="(val:any) => valChange(val, item.name)"
               ></BaseFormItem>
             </el-form-item>
             <div class="remove-box">
